@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="app_bg">#f8f8f8</color>
+    <color name="black">#313131</color>
+    <color name="light_black">#505050</color>
+    <color name="white">#F7FBFF</color>
+    <color name="blue">#0888FF</color>
+    <color name="red">#FD3636</color>
+    <color name="light_red">#F36C6C</color>
+    <!-- 深灰色 -->
+    <color name="dark_grey">#6D6D6D</color>
+    <!-- 灰色 -->
+    <color name="gray">#9B9B9B</color>
+    <!-- 淡灰色 -->
+    <color name="light_grey">#B6B6B6</color>
+
+    <color name="btn_normal_bg">#F79801</color>
+    <color name="btn_selector_bg">#decd8e01</color>
+
+    <color name="line">#ffd3dde6</color>
+    <color name="gray_color">#ffe8ecef</color>
+    <color name="by56_bg">#2B86E3</color>
+    <color name="light_blue">#a12b86e3</color>
+    <color name="dark_gray_color">#b7bbbe</color>
+
+</resources>

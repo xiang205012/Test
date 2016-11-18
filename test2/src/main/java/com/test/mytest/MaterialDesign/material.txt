@@ -1,0 +1,13 @@
+ /**
+     * AppBarLayout，
+     * NavigationView，
+     * CoordinatorLayout，
+     * CollapsingToolbarLayout
+     * TabLayout
+     * Snackbar
+     * TextInputLayout
+     * FloatingActionButton
+     * NestedScrollView(比如你使用了Toolbar，下面一个ScrollView，
+     *      向上滚动隐藏Toolbar，向下滚动显示Toolbar，这里在逻辑上就是一个NestedScrolling ——
+     *      因为你在滚动整个Toolbar在内的View的过程中，又嵌套滚动了里面的ScrollView。)
+     */

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.test.mytest">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/><!-- 录音权限 -->
+
+
+    <application
+        android:name="com.test.mytest.MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.test.mytest.imageLoader.ImageLoaderActivity"
+
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.test.mytest.testRecyclerView.RecyclerViewActivity"/>
+        <activity android:name="com.test.mytest.testVolley.ImageActivity"/>
+        <activity android:name="com.test.mytest.testCamerahead.CameraActivity"/>
+        <activity android:name="com.test.mytest.testORMLite.ORMLiteActivity"/>
+        <activity android:name="com.test.mytest.testPopWindow.PopWindowActivity"/>
+        <activity android:name="com.test.mytest.testDialog.DialogActivity"/>
+        <activity android:name="com.test.mytest.testA_Z_ListView.AZListViewActivity"/>
+        <activity android:name="com.test.mytest.testTopIndicator.TopIndicatorActivity"/>
+        <activity android:name="com.test.mytest.testTopNavigationBar.TopNavigationBarActivity"/>
+        <activity android:name="com.test.mytest.MaterialDesign.dialog.MyBaseDialogActivity"/>
+        <activity android:name="com.test.mytest.MaterialDesign.cardview.MyCardViewActivity"/>
+        <activity android:name="com.test.mytest.MaterialDesign.toolbar.MyToolBarActivity"/>
+        <activity android:name="com.test.mytest.testChatListView.TestChatListViewActivity"/>
+        <activity android:name="com.test.mytest.testSwipeMenuListview.SwipeMenuListViewActivity"/>
+        <activity android:name="com.test.mytest.propertyAnimation.PropertyAnimationActivity"/>
+        <activity android:name="com.test.mytest.testWebView.WebViewActivity"/>
+        <activity android:name="com.test.mytest.testCustomCarmer.CustomCamerActivity"/>
+        <activity android:name="com.test.mytest.testCustomCalendar.CustomCalendarActivity"/>
+        <activity android:name="com.test.mytest.testCustomView.CustomViewActivity"/>
+        <activity android:name="com.test.mytest.testViewPager.ViewPagerActivity"/>
+        <activity android:name="com.test.mytest.testCustomView.canvas.CanvasActivity"/>
+        <activity android:name="com.test.mytest.testCustomView.zhanghongyang.ZhangCustomViewMainActivity"/>
+        <activity android:name="com.test.mytest.testObserver.ObserverActivity"/>
+        <activity android:name="com.test.mytest.testViewPagerIndicator.ViewPagerIndicatorActivity"/>
+        <activity android:name="com.test.mytest.testTaobaoSortList.TaobaoSortListActivity"/>
+        <activity android:name="com.test.mytest.testCalendarView.CalendarViewActivity"/>
+    </application>
+
+</manifest>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_observer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="测试观察者"/>
+
+    <EditText
+        android:id="@+id/et_number"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:layout_marginTop="30dp"
+        android:hint="输入数字"/>
+
+    <Button
+        android:id="@+id/btn_start_one_or_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="跳到观察者查看数据是否被观察到"/>
+
+</LinearLayout>

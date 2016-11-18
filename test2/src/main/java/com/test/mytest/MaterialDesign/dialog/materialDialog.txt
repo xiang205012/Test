@@ -1,0 +1,199 @@
+
+compile 'com.afollestad:material-dialogs:0.7.9.0'
+
+---------------------------------------------------
+
+    MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+            .title(R.string.title)
+            .content(R.string.content)
+            .positiveText(R.string.agree);
+
+    MaterialDialog dialog = builder.build();
+    dialog.show();
+
+View negative = dialog.getActionButton(DialogAction.NEGATIVE);
+View neutral = dialog.getActionButton(DialogAction.NEUTRAL);
+View positive = dialog.getActionButton(DialogAction.POSITIVE);
+------------------------------------------------------
+AlertDialogs：
+    new AlertDialogWrapper.Builder(this)
+            .setTitle(R.string.title)
+            .setMessage(R.string.message)
+            .setNegativeButton(R.string.OK, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+
+------------------------------------------
+List Dialogs：ListView listview = dialog.getListView();
+    new MaterialDialog.Builder(this)
+            .title(R.string.title)
+            .items(R.array.items)
+            .itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                }
+            })
+            .show();
+
+-----------------------------------------------------------
+Single Choice List Dialogs：
+     new MaterialDialog.Builder(this)
+             .title(R.string.title)
+             .items(R.array.items)
+             .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                 @Override
+                 public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                     /**
+                      * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                      * returning false here won't allow the newly selected radio button to actually be selected.
+                      **/
+                     return true;
+                 }
+             })
+             .positiveText(R.string.choose)
+             .show();
+
+---------------------------------------------------------------
+Multi Choice List Dialogs：
+    new MaterialDialog.Builder(this)
+            .title(R.string.title)
+            .items(R.array.items)
+            .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                @Override
+                public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    /**
+                     * If you use alwaysCallMultiChoiceCallback(), which is discussed below,
+                     * returning false here won't allow the newly selected check box to actually be selected.
+                     * See the limited multi choice dialog example in the sample project for details.
+                     **/
+                     return true;
+                }
+            })
+            .positiveText(R.string.choose)
+            .show();
+
+--------------------------------------------------
+Custom List Dialogs：自定义ButtonItemAdapter
+    new MaterialDialog.Builder(this)
+            .title(R.string.socialNetworks)
+            .adapter(new ButtonItemAdapter(this, R.array.socialNetworks),
+                    new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                            Toast.makeText(MainActivity.this, "Clicked item " + which, Toast.LENGTH_SHORT).show();
+                        }
+                    })
+            .show();
+
+------------------------------------------------
+customView：View view = dialog.getCustomView();
+    MaterialDialog dialog = new MaterialDialog.Builder(this)
+                    .title(R.string.googleWifi)
+                    .customView(R.layout.dialog_customview, true)
+                    .positiveText(R.string.connect)
+                    .negativeText(android.R.string.cancel)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            showToast("Password: " + passwordInput.getText().toString());
+                        }
+                    }).build();
+
+            positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+            passwordInput = (EditText) dialog.getCustomView().findViewById(R.id.password);
+            passwordInput.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    positiveAction.setEnabled(s.toString().trim().length() > 0);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+
+----------------------------------------------------
+customView_webView:
+    int accentColor = ThemeSingleton.get().widgetColor;
+    if (accentColor == 0)
+        accentColor = ContextCompat.getColor(this, R.color.material_teal_a400);
+        ChangelogDialog.create(false, accentColor)
+                .show(getSupportFragmentManager(), "changelog");
+
+-----------------------------------------------------
+Input Dialogs:
+    new MaterialDialog.Builder(this)
+            .title(R.string.input)
+            .content(R.string.input_content)
+            .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+            .input(R.string.input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
+                @Override
+                public void onInput(MaterialDialog dialog, CharSequence input) {
+                    // Do something
+                }
+            }).show();
+
+     new MaterialDialog.Builder(this)
+                    .title(R.string.input)
+                    .content(R.string.input_content)
+                    .inputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_PERSON_NAME |
+                            InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                    .inputRange(2, 16)//最少2位最大16位
+                    .positiveText(R.string.submit)//提交按钮
+                    .input(R.string.input_hint, R.string.input_hint, false, new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(MaterialDialog dialog, CharSequence input) {
+                            //点击提交按钮，显示toast
+                            showToast("Hello, " + input.toString() + "!");
+                        }
+                    }).show();
+
+
+------------------------------------------------
+Colors:
+    new MaterialDialog.Builder(this)
+            .titleColorRes(R.color.material_red_500)
+            .contentColor(Color.WHITE) // notice no 'res' postfix for literal color
+            .linkColorAttr(R.attr.my_link_color_attr)  // notice attr is used instead of none or res for attribute resolving
+            .dividerColorRes(R.color.material_pink_500)
+            .backgroundColorRes(R.color.material_blue_grey_800)
+            .positiveColorRes(R.color.material_red_500)
+            .neutralColorRes(R.color.material_red_500)
+            .negativeColorRes(R.color.material_red_500)
+            .widgetColorRes(R.color.material_red_500)
+            .buttonRippleColorRes(R.color.material_red_500)
+            .show();
+
+----------------------------------------------
+Theming:
+    new MaterialDialog.Builder(this)
+            .content("Hi")
+            .theme(Theme.DARK)
+            .show();
+
+---------------------------------------------------
+Selectors:
+    new MaterialDialog.Builder(this)
+            .btnSelector(R.drawable.custom_btn_selector)
+            .btnSelector(R.drawable.custom_btn_selector_primary, DialogAction.POSITIVE)
+            .btnSelectorStacked(R.drawable.custom_btn_selector_stacked)
+            .listSelector(R.drawable.custom_list_and_stackedbtn_selector)
+            .show();
+
+-------------------------------------------------------
+Gravity:
+    new MaterialDialog.Builder(this)
+            .titleGravity(GravityEnum.CENTER)
+            .contentGravity(GravityEnum.CENTER)
+            .btnStackedGravity(GravityEnum.START)
+            .itemsGravity(GravityEnum.END)
+            .buttonsGravity(GravityEnum.END)
+            .show();

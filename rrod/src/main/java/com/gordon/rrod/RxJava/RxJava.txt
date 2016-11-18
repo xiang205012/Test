@@ -1,0 +1,696 @@
+
+RxJava的观察者模式
+
+    RxJava有四个基本概念：
+        Observable(可观察者，即被观察者)
+        Oberver(观察者)
+        subscribe(订阅)
+        事件
+        Observable和Observer通过subscribe()方法实现订阅关系，
+        从而Observable可以再需要的时候发出事件来通知Observer.
+
+    RxJava的基本实现主要有三点：
+        1.创建Observer(即观察者)，它决定事件触发的时候将有怎样的行为，通过Observer接口实现
+            Oberver<String> observer = new Observer<String>(){
+                onNext(String s)// 事件处理
+                onCompleted() // 事件处理完毕
+                onError(Throwable e) // 错误
+            }
+            除了Observer接口之外，RxJava还内置了一个实现了Observer的抽象类：Subscriber.
+            Subscriber对Observer接口进行了一些扩展，但他们的基本使用方式是完全一致的：
+              Subscriber<String> subscriber = new Subscriber<String>(){
+                onNext(String s)
+                onCompleted();
+                onErrro(Throwable e)
+              }
+            实质上在RxJava的subscribe过程中，Observer 也总是会先被转换成一个 Subscriber 再使用。
+            所以如果你只想使用基本功能，选择 Observer 和 Subscriber 是完全一样的。
+            它们的区别对于使用者来说主要有两点：
+               1. onStart(): 这是 Subscriber 增加的方法。它会在 subscribe 刚开始，
+                  而事件还未发送之前被调用，可以用于做一些准备工作，例如数据的清零或重置。
+                  这是一个可选方法，默认情况下它的实现为空。需要注意的是，如果对准备工作的线程有要求
+                  （例如弹出一个显示进度的对话框，这必须在主线程执行）， onStart() 就不适用了，
+                  因为它总是在 subscribe 所发生的线程被调用，而不能指定线程。要在指定的线程来做准备工作，
+                  可以使用 doOnSubscribe() 方法，具体可以在后面的文中看到。
+               2. unsubscribe(): 这是 Subscriber 所实现的另一个接口 Subscription 的方法，用于取消订阅。
+                  在这个方法被调用后，Subscriber 将不再接收事件。一般在这个方法调用前，
+                  可以使用 isUnsubscribed() 先判断一下状态。 unsubscribe() 这个方法很重要，
+                  因为在 subscribe() 之后， Observable 会持有 Subscriber 的引用，这个引用如果不能及时被释放，
+                  将有内存泄露的风险。所以最好保持一个原则：要在不再使用的时候尽快在合适的地方
+                  （例如 onPause() onStop() 等方法中）调用 unsubscribe() 来解除引用关系，以避免内存泄露的发生。
+
+        2.创建Observable(即被观察者)，它决定什么时候触发事件以及触发怎样的事件，
+          RxJava使用create()来创建一个Observable，并为它定义事件的触发规则：
+            Observable observable = Observable.create(
+                     new Observable.OnSubscribe<String s>(){
+                           @Override
+                           public void call(Subscriber<? super String> subscriber){
+                                subscriber.onNext("Hello")
+                                subscriber.onNext("Hello")
+                                subscriber.onNext("Hello")
+                                subscriber.onCompleted();
+                           }
+                     });
+            这里传入了一个OnSubscribe对象作为参数，OnSubscribe会被存储在返回的Observable对象中，
+            它的作用相当于一个计划表，当Observable被订阅的时候，OnSubscribe的call()方法会自动被调用，
+            事件序列就会依照设定依次触发(上面的代码就是观察者Subscriber将会被调用三次onNext()和
+            一次onCompleted()).这样由被观察者调用了观察者的回调方法，就实现了由被观察者向观察者的事件传递，即观察者模式
+            create() 方法是 RxJava 最基本的创造事件序列的方法。基于这个方法， RxJava 还提供了一些方法用来快捷创建事件队列，
+            例如：
+            just(T...): 将传入的参数依次发送出来。
+            Observable observable = Observable.just("Hello", "Hi", "Aloha");
+            // 将会依次调用：
+            // onNext("Hello");
+            // onNext("Hi");
+            // onNext("Aloha");
+            // onCompleted();
+            from(T[]) / from(Iterable<? extends T>) : 将传入的数组或 Iterable 拆分成具体对象后，依次发送出来。
+            String[] words = {"Hello", "Hi", "Aloha"};
+            Observable observable = Observable.from(words);
+            // 将会依次调用：
+            // onNext("Hello");
+            // onNext("Hi");
+            // onNext("Aloha");
+            // onCompleted();
+            上面 just(T...) 的例子和 from(T[]) 的例子，都和之前的 create(OnSubscribe) 的例子是等价的。
+
+
+        3.Subscribe(订阅，即观察者)
+            创建了 Observable 和 Observer 之后，再用 subscribe() 方法将它们联结起来，整条链子就可以工作了。代码形式很简单：
+            observable.subscribe(observer);
+            // 或者：
+            observable.subscribe(subscriber);
+
+            除了 subscribe(Observer) 和 subscribe(Subscriber) ，subscribe() 还支持不完整定义的回调，RxJava 会自动根据定义创建出 Subscriber 。形式如下：
+            Action1<String> onNextAction = new Action1<String>() {
+                // onNext()
+                @Override
+                public void call(String s) {
+                    Log.d(tag, s);
+                }
+            };
+            Action1<Throwable> onErrorAction = new Action1<Throwable>() {
+                // onError()
+                @Override
+                public void call(Throwable throwable) {
+                    // Error handling
+                }
+            };
+            Action0 onCompletedAction = new Action0() {
+                // onCompleted()
+                @Override
+                public void call() {
+                    Log.d(tag, "completed");
+                }
+            };
+
+            // 自动创建 Subscriber ，并使用 onNextAction 来定义 onNext()
+            observable.subscribe(onNextAction);
+            // 自动创建 Subscriber ，并使用 onNextAction 和 onErrorAction 来定义 onNext() 和 onError()
+            observable.subscribe(onNextAction, onErrorAction);
+            // 自动创建 Subscriber ，并使用 onNextAction、 onErrorAction 和 onCompletedAction 来定义 onNext()、 onError() 和 onCompleted()
+            observable.subscribe(onNextAction, onErrorAction, onCompletedAction);
+
+    RxJava线程控制: Scheduler(调度器)
+        在不指定线程的情况下， RxJava 遵循的是线程不变的原则，
+        即：在哪个线程调用 subscribe()，就在哪个线程生产事件；
+        在哪个线程生产事件，就在哪个线程消费事件。如果需要切换线程，就需要用到 Scheduler （调度器）。
+        在RxJava 中，Scheduler ——调度器，相当于线程控制器，RxJava 通过它来指定每一段代码应该运行在什么样的线程。
+        RxJava 已经内置了几个 Scheduler ，它们已经适合大多数的使用场景：
+          Schedulers.immediate(): 直接在当前线程运行，相当于不指定线程。这是默认的 Scheduler。
+          Schedulers.newThread(): 总是启用新线程，并在新线程执行操作。
+          Schedulers.io(): I/O 操作（读写文件、读写数据库、网络信息交互等）所使用的 Scheduler。
+            行为模式和 newThread() 差不多，区别在于 io() 的内部实现是是用一个无数量上限的线程池，
+            可以重用空闲的线程，因此多数情况下 io() 比 newThread() 更有效率。
+            不要把计算工作放在 io() 中，可以避免创建不必要的线程。
+          Schedulers.computation(): 计算所使用的 Scheduler。
+            这个计算指的是 CPU 密集型计算，即不会被 I/O 等操作限制性能的操作，
+            例如图形的计算。这个 Scheduler 使用的固定的线程池，大小为 CPU 核数。
+            不要把 I/O 操作放在 computation() 中，否则 I/O 操作的等待时间会浪费 CPU。
+          另外， Android 还有一个专用的 AndroidSchedulers.mainThread()，它指定的操作将在 Android 主线程运行。
+          有了这几个 Scheduler ，就可以使用 subscribeOn() 和 observeOn() 两个方法来对线程进行控制了。
+           * subscribeOn(): 指定 subscribe() 所发生的线程，
+                即 Observable.OnSubscribe 被激活时所处的线程。或者叫做事件产生的线程。
+           * observeOn(): 指定 Subscriber 所运行在的线程。或者叫做事件消费的线程。
+            如：Observable.just(1, 2, 3, 4)
+               .subscribeOn(Schedulers.io()) // 指定 subscribe() 发生在 IO 线程
+               .observeOn(AndroidSchedulers.mainThread()) // 指定 Subscriber 的回调发生在主线程
+               .subscribe(new Action1<Integer>() {
+                   @Override
+                   public void call(Integer number) {
+                       Log.d(tag, "number:" + number);
+                   }
+               });
+
+
+    RxJava操作符：操作符是为了解决对Observable对象的变换的问题，
+                 操作符用于在Observable和最终的Subscriber之间修改Observable发出的事件。
+        Map：
+            用来把一个事件转换为另一个事件。
+            map()操作符就是用于变换Observable对象的，map操作符返回一个Observable对象，
+            这样就可以实现链式调用，在一个Observable对象上多次使用map操作符，
+            最终将最简洁的数据传递给Subscriber对象。
+            特性:
+            它不必返回Observable对象返回的类型，你可以使用map操作符返回一个发出新的数据类型的observable对象。
+            可以对一个Observable多次使用map
+            用一个例子来练习:
+
+            //刚创建的Observable是String类型的
+            Observable.just("Hellp Map Operator")
+            .map(new Func1<String, Integer>() {
+                @Override
+                public Integer call(String s) {
+                    return 2015;//通过第一个map转成Integer
+                }
+            }).map(new Func1<Integer, String>() {
+                @Override
+                public String call(Integer integer) {
+                    return String.valueOf(integer);//再通过第二个map转成String
+                }
+            }).subscribe(new Action1<String>() {
+                @Override
+                public void call(String s) {
+                    System.out.println(s);
+                }
+            });
+            Run起来输出日志:2015
+
+        From：from()接收一个集合作为输入，然后每次输出一个元素给subscriber.
+            1.from(Iterable<? extends T> iterable)
+            2.from(T[] array)
+            看个例子,将集合的数据都输出:
+            List<String> s = Arrays.asList("Java", "Android", "Ruby", "Ios", "Swift");
+            Observable.from(s).subscribe(new Action1<String>() {
+                @Override
+                public void call(String s) {
+                    System.out.println(s);
+                }
+            });
+            Log:
+                Java
+                Android
+                Ruby
+                Ios
+                Swift
+            另外from也接受数组类型:
+            Observable.from(new String[]{"Java","Android"}).subscribe(new Action1<String>() {
+                @Override
+                public void call(String s) {
+                    System.out.println(s);
+                }
+            });
+
+        FlatMap：Observable.flatMap()接收一个Observable的输出作为输入，同时输出另外一个Observable。
+            先加一个函数
+            static Observable<List<String>>query(){
+                    List<String> s = Arrays.asList("Java", "Android", "Ruby", "Ios", "Swift");
+                    return Observable.just(s);
+            }
+
+            我们打印所有query到的语言:
+            // 注意这里的参数是 query所返回的Observable的输出,并且返会一个Observable<String>
+            query().flatMap(new Func1<List<String>, Observable<String>>() {
+                @Override
+                public Observable<String> call(List<String> strings) {
+                    //结合from处理
+                    return Observable.from(strings);
+                }
+            }).subscribe(new Action1<String>() {
+                @Override
+                public void call(String s) {
+                    System.out.println("_flatMap:"+s);
+                }
+            });
+            日志:
+            _flatMap:Java
+            _flatMap:Android
+            _flatMap:Ruby
+            _flatMap:Ios
+            _flatMap:Swift
+            注意:query返回的Observable的输出是List<String>,在flatMap中变成了参数,
+            而处理过后,返回一个Observable<String>.
+
+        更多操作符：
+            filter 过滤,把不符合条件的过滤掉,留下符合条件的
+            take 指定最多输出的数量
+            doOnNext 允许我们在每次输出一个元素之前做一些额外的事情(其实就是在onNext里调用的)
+            就用一个例子来演示一下吧:
+            query().flatMap(new Func1<List<String>, Observable<String>>() {
+                @Override
+                public Observable<String> call(List<String> strings) {
+                    return Observable.from(strings);
+                }
+            }).flatMap(new Func1<String, Observable<String>>() {
+                @Override
+                public Observable<String> call(String s) {
+                    return addPre(s);
+                }
+            }).filter(new Func1<String, Boolean>() {
+                @Override
+                public Boolean call(String s) {
+                    //包含a的留下
+                    return s.contains("a");
+                }
+            }).take(3)//最多只取3个
+              .doOnNext(new Action1<String>() {
+                @Override
+                public void call(String s) {
+                    //onNext之前 输出一下
+                    System.out.println("doOnNext:"+s);
+                }
+            }).subscribe(new Action1<String>() {
+                @Override
+                public void call(String s) {
+                    System.out.println(s);
+                }
+            });
+            输出:
+                doOnNext:addPre_Java
+                addPre_Java
+                doOnNext:addPre_Android
+                addPre_Android
+                doOnNext:addPre_Ruby
+                addPre_Ruby
+
+         1、View防止连续点击Demo
+               不多说，很常用的功能
+                throttleFirst操作符：仅发送指定时间段内的第一个信号
+
+                RxView.clicks(btn_click)
+                        .throttleFirst(3, TimeUnit.SECONDS)
+                        .subscribe(new Action1<Void>() {
+                            @Override
+                            public void call(Void aVoid) {
+                                Toast.makeText(getActivity(), R.string.des_demo_not_more_click, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+            2、CheckBox状态更新相关Demo
+                   （1） 设置界面某项功能被打开或关闭，在SharedPreferences中存储对应的开关标记，方便其他地方读取
+                    注：需要RxSharedPreferences库支持:https://github.com/f2prateek/rx-preferences
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    RxSharedPreferences rxPreferences = RxSharedPreferences.create(preferences);
+                    Preference<Boolean> xxFunction = rxPreferences.getBoolean("xxFunction", false);
+
+                    checkBox1.setChecked(xxFunction.get());
+
+                    RxCompoundButton.checkedChanges(checkBox1)
+                            .subscribe(xxFunction.asAction());
+
+                            （2）在用户登录界面时，如果用户未勾选同意用户协议，不允许登录
+
+                    RxCompoundButton.checkedChanges(checkBox2)
+                            .subscribe(new Action1<Boolean>() {
+                                @Override
+                                public void call(Boolean aBoolean) {
+                                    btn_login.setClickable(aBoolean);
+                                    btn_login.setBackgroundResource(aBoolean ? R.color.can_login : R.color.not_login);
+                                }
+                            });
+
+            3、搜索关键字提醒
+                搜索的关键字提醒功能，RxJava实现方式是如此的小清新。
+                    debounce操作符:仅在过了一段制定的事件还没发射数据时才发射一个数据
+                        debounce操作符会过滤掉发射速率过快的数据项
+                        （应用场景：如搜索时根据输入的文字更新下方的listView刷新，防止listView过于频繁的刷新）
+                            RxTextView.textChangeEvents(inputEditText)
+                                  .debounce(400, TimeUnit.MILLISECONDS)
+                                  .observeOn(AndroidSchedulers.mainThread())
+                                  .subscribe(new Observer<TextViewTextChangeEvent>() {
+                                @Override
+                                public void onCompleted() {
+                                    log.d("onComplete");
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    log.d("Error");
+                                }
+
+                                @Override
+                                public void onNext(TextViewTextChangeEvent onTextChangeEvent) {
+                                    log.d(format("Searching for %s", onTextChangeEvent.text().toString()));
+                                }
+                            });
+
+            Buffer操作符：定期收集Observable的数据放进一个数据包裹，然后发射这些数据包裹而不是一个一个发射
+                1、buffer(count):每接收到count个数据包裹，将这count个包裹打包，发送给订阅者
+                      案例：点击按钮达到指定次数后，触发某事件（即：View的N连击事件）
+
+                RxView.clicks(btn_buffer_count)
+                        .buffer(3)
+                        .compose(this.<List<Void>>bindToLifecycle())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<List<Void>>() {
+                @Override
+                public void call(List<Void> voids) {
+                                Toast.makeText(BufferFragment.this.getActivity(), R.string.des_demo_buffer_count, Toast.LENGTH_SHORT).show();
+                }
+                        });
+
+
+                2、Buffer(count , skip):每接收到count个数据后，将该count的个数据打包，并跳过第skip个数据，发送给订阅者
+                    案例：输入123456 ， 两两发送，并跳过之后的一个数据，即最后订阅者接收到[1,2] [4,5] 两个数据包裹， 3和6 分别被跳过
+
+                    Observable.from(chs)
+                            .buffer(2, 3)
+                            .compose(this.<List<Character>>bindToLifecycle())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Action1<List<Character>>() {
+
+                                    @Override
+                                    public void call(List<Character> characters) {
+                                    tv_output.setText(tv_output.getText() + characters.toString());
+                                }
+                            });
+
+
+                Zip操作符：通过一个函数将多个Observables的发射物结合到一起，
+                            基于这个函数的结果为每个结合体发射单个数据项，
+
+                     使用场景:
+                             当某界面内容来源不同，但需同时显示出来时
+                             eg1:    一部分数据来自本地，一部分来自网络
+
+                     Observable.zip(
+                             queryContactsFromLocation(),
+                             queryContactsForNet(),
+                             new Func2<List<Contacter>, List<Contacter>, List<Contacter>>() {
+                                 @Override
+                                 public List<Contacter> call(List<Contacter> contacters, List<Contacter> contacters2) {
+                                     contacters.addAll(contacters2);
+                                     return contacters;
+                     }
+                             }
+                     ).compose(this.<List<Contacter>>bindToLifecycle())
+                             .subscribeOn(Schedulers.io())
+                             .observeOn(AndroidSchedulers.mainThread())
+                             .subscribe(new Action1<List<Contacter>>() {
+                                 @Override
+                                 public void call(List<Contacter> contacters) {
+                                     initPage(contacters);
+                                 }
+                             });
+
+                     /**
+                      * 模拟手机本地联系人查询
+                      */
+                     private Observable<List<Contacter>> queryContactsFromLocation() {
+                         return Observable.create(new Observable.OnSubscribe<List<Contacter>>() {
+                             @Override
+                             public void call(Subscriber<? super List<Contacter>> subscriber) {
+
+                                 ArrayList<Contacter> contacters = new ArrayList<>();
+                                 contacters.add(new Contacter("location:张三"));
+                                 contacters.add(new Contacter("location:李四"));
+                                 contacters.add(new Contacter("location:王五"));
+                                 subscriber.onNext(contacters);
+                                 subscriber.onCompleted();
+                             }
+                         });
+                     }
+
+                     /**
+                      * 模拟网络联系人列表
+                      */
+                     private Observable<List<Contacter>> queryContactsForNet() {
+                         return Observable.create(new Observable.OnSubscribe<List<Contacter>>() {
+                             @Override
+                             public void call(Subscriber<? super List<Contacter>> subscriber) {
+
+                                 try {
+                                     Thread.sleep(3000);
+                                 } catch (InterruptedException e) {
+                                     e.printStackTrace();
+                                 }
+
+                                 ArrayList<Contacter> contacters = new ArrayList<>();
+                                 contacters.add(new Contacter("net:Zeus"));
+                                 contacters.add(new Contacter("net:Athena"));
+                                 contacters.add(new Contacter("net:Prometheus"));
+                                 subscriber.onNext(contacters);
+                                 subscriber.onCompleted();
+                             }
+                         });
+                     }
+                            当然对于来源不同、类型不同的数据我们也可以使用Zip的，
+                             只需将两种Fun2的call()方法中先暂存起来，最后在订阅回调中分离使用即可，
+                             常见的应用场所比如下面这个界面。
+                             顶部是Html组成的Web页面，底部是原生的评论页面，数据分别来自两个不同的接口，
+                             为了保证界面的完整显示，在这里我们可以使用Zip。
+
+                Merge操作符：合并多个Observables的发射物
+                    前面已经介绍过一个数据合并的操作符Zip，还望大家不要跟Merge操作符混淆，
+                    Merge其实只是将多个Obsevables的输出序列变为一个，方便订阅者统一处理，
+                    对于订阅者来说就仿佛只订阅了一个观察者一样。
+                        还是直接看Demo比较清晰：
+
+                    Observable.merge(
+                            getDataFromLocation(),
+                            getDataFromNet()
+                    ).compose(this.<List<Contacter>>bindToLifecycle())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Action1<List<Contacter>>() {
+                            @Override
+                            public void call(List<Contacter> contacters) {
+                                    initPage(contacters);
+                            }
+                            }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+
+                                }
+                            });
+
+                    private Observable<List<Contacter>> getDataFromNet() {
+                    return Observable.create(new Observable.OnSubscribe<List<Contacter>>() {
+                            @Override
+                            public void call(Subscriber<? super List<Contacter>> subscriber) {
+                            try {
+                                    Thread.sleep(3000);
+                            } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                            }
+
+                                ArrayList<Contacter> contacters = new ArrayList<>();
+                                contacters.add(new Contacter("net:Zeus"));
+                                contacters.add(new Contacter("net:Athena"));
+                                contacters.add(new Contacter("net:Prometheus"));
+                                subscriber.onNext(contacters);
+                                subscriber.onCompleted();
+
+                            }
+                        });
+
+                    private Observable<List<Contacter>> getDataFromLocation() {
+                        return Observable.create(new Observable.OnSubscribe<List<Contacter>>() {
+                            @Override
+                            public void call(Subscriber<? super List<Contacter>> subscriber) {
+                            try {
+                                    Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                            }
+
+                                List<Contacter> datas = new ArrayList<>();
+                                datas.add(new Contacter("location:" + "张三"));
+                                datas.add(new Contacter("location:" + "李四"));
+                                datas.add(new Contacter("location:" + "王五"));
+
+                                subscriber.onNext(datas);
+                                subscriber.onCompleted();
+                            }
+                        });
+                    }
+                        // 这里有两次输出结果:第一个次是1秒后输出本地数据，第二个是3秒后输出网络数据
+                        如果是listView显示：1秒后显示 net:Zeus
+                                                   net:Athena
+                                                   net:Prometheus
+                                          3秒后显示 location:" + "张三
+                                                   location:" + "李四
+                                                   location:" + "王五
+
+            Interval操作符：创建一个按固定时间间隔发射整数序列的Observable
+                            Interval操作符返回一个Observable，它按固定的时间间隔发射一个无限递增的整数序列
+                对于轮询器大家一定不陌生，开发中无论是Java的Timer+TimeTask , 还是Android的Hanlder都可实现，
+                那么现在给大家再介绍种简单的实现方式：利用RxJava的Interval操作符。
+                        以下是一个利用Interval操作符实现的ViewPager广告栏自动切换的核心代码：
+
+                subscribe_auto = Observable.interval(3000, 3000, TimeUnit.MILLISECONDS)
+                //延时3000 ，每间隔3000，时间单位
+                .compose(this.<Long>bindToLifecycle())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<Long>() {
+                            @Override
+                            public void call(Long aLong) {
+                                int currentIndex = mViewPager.getCurrentItem();
+                                if (++currentIndex == loopAdapter.getCount()) {
+                                    mViewPager.setCurrentItem(0);
+                                } else {
+                                    mViewPager.setCurrentItem(currentIndex, true);
+                                }
+                            }
+                        });
+
+            Timer操作符：创建一个Observable，它在一个给定的延迟后发射一个特殊的值。
+                3秒后显示图片
+
+                Observable.timer(3000 , TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(this.<Long>bindToLifecycle())
+                        .subscribe(new Action1<Long>() {
+                            @Override
+                            public void call(Long aLong) {
+                            iv_welcome.setVisibility(View.VISIBLE);
+                            ObjectAnimator
+                                  .ofFloat(iv_welcome, "alpha", 0.0F, 1.0F)
+                                  .setDuration(500)
+                                  .start();
+                            }
+                        });
+
+             PublishSubject：
+                与普通的Subject不同，在订阅时并不立即触发订阅事件，而是允许我们在任意时刻手动调用onNext(),onError(),onCompleted来触发事件。
+
+                可以看到PublishSubject
+
+                与普通的Subject最大的不同就是其可以先订阅事件，然后在某一时刻手动调用方法来触发事件，那么拿他又能做些什么？
+
+                    举个例子：当一个界面发生改变，通知另一个界面做出响应，以下是两个Fragment之间通讯的Demo
+
+                    1、首先在外部定义好公共的
+
+                 PublishSubject
+
+                 对象
+
+                 PublishSubject<String> publishSubject = PublishSubject.create();
+                 PublishSubjectTopFragment topFragment = new PublishSubjectTopFragment(publishSubject);
+                 PublishSubjectBottomFragment bottom_Fragment = new PublishSubjectBottomFragment(publishSubject);
+                 getActivity().getSupportFragmentManager()
+                         .beginTransaction()
+                         .replace(R.id.fl_top,topFragment, "top")
+                         .replace(R.id.fl_bottom, bottom_Fragment, "bottom")
+                         .commit();
+
+                     2、TopFragment中负责发生改变并发出信息
+
+                 @OnClick(R.id.btn_send)
+                 void sendToBottom(){
+                         String result = et_input.getText().toString().trim();
+                         publishSubject.onNext(result);
+                 }
+
+                     3、BottomFragment中接收到通知后，产生响应
+
+                 publishSubject.subscribe(new Action1<String>() {
+                         @Override
+                         public void call(String s) {
+                             tv_result.setText(s);
+                         }
+                 });
+
+
+
+RxBus
+
+首先RxBus并不是一个库，只是通过使用RxJava实现的事件总线的通讯工具，比起EventBus，RxJava的实现代码更加简介，因为其本身就是观察者设计模式拓展而来。
+    RxBus相关资料：http://nerds.weddingpartyapp.com/tech/2014/12/24/implementing-an-event-bus-with-rxjava-rxbus/
+
+    RxBus实现源码：
+
+package com.che58.ljb.rxjava.rxbus;
+
+import rx.Observable;
+import rx.subjects.PublishSubject;
+import rx.subjects.SerializedSubject;
+import rx.subjects.Subject;
+
+/**
+ * RxBus
+ */
+public class RxBus {
+
+//private final PublishSubject<Object> _bus = PublishSubject.create();  //线程不安全
+
+private final Subject<Object, Object> _bus = new SerializedSubject<>(PublishSubject.create());  //线程安全
+
+public void send(Object o) {
+    _bus.onNext(o);
+}
+
+/**获取实际的Bus对象*/
+public Observable<Object> toObserverable() {
+    return _bus;
+}
+
+/**是否含有观察者*/
+public boolean hasObservers() {
+    return _bus.hasObservers();
+}
+}
+
+        是不是很眼熟？没错，RxBus就是通过PublishSubject实现，其实早（八）RxJava：PublishSubject 中，我就已经实现了RxBus类似的功能（一个线程不安全的RxBus）。
+        这里也就不另写Demo，直接引用@kaushikgopal大神的Demo.
+        1、外部定义公共的RxBus对象(MainActivty中)
+
+private RxBus _rxBus = null;
+
+/**获取RxBus对象*/
+public RxBus getRxBusSingleton() {
+    if (_rxBus == null) {
+        _rxBus = new RxBus();
+    }
+    return _rxBus;
+}
+
+        2、TopFragment触发事件，并发出通知
+
+@OnClick(R.id.btn_demo_rxbus_tap)
+public void onTapButtonClicked() {
+    if (_rxBus.hasObservers()) {    //是否有观察者，有，则发送一个事件
+        _rxBus.send(new RxBusDemoFragment.TapEvent());
+    }
+}
+
+        3、BottomFragment订阅事件
+
+//将普通的Observable转换为可连接的Observable
+ConnectableObservable<Object> tapEventEmitter = _rxBus.toObserverable().publish();
+
+tapEventEmitter
+        .compose(this.bindToLifecycle())
+        .subscribe(new Action1<Object>() { //一个一旦被触发就会显示TapText的监听者
+           @Override
+           public void call(Object event) {
+                if (event instanceof RxBusDemoFragment.TapEvent) {
+                    _showTapText();
+                }
+            }
+        });
+
+tapEventEmitter
+        .compose(this.bindToLifecycle())
+        .publish(new Func1<Observable<Object>, Observable<List<Object>>>() {//一个出发后缓存一秒内的点击数并显示的监听者
+            @Override
+            public Observable<List<Object>> call(Observable<Object> stream) {
+                return stream.buffer(stream.debounce(1, TimeUnit.SECONDS)); //进行缓冲1秒，打包发送
+            }
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<Object>>() {
+            @Override
+            public void call(List<Object> taps) {
+                _showTapCount(taps.size());
+        }
+});
+
+tapEventEmitter.connect();  //可连接的Observable并不在订阅时触发，而需手动调用connect()方法
+
+        值得一提的时，rxbus在订阅多个观察者（订阅者）时，使用了publish()操作符，该操作符会返回一个可连接的被观察者，
+        该被观察者并不会在订阅时立即发出数据序列，当其调用connect()操作符时才会发出数据序列。
+
+                    RxJava详解：
+                        http://blog.csdn.net/qq1026291832/article/details/51006451
+

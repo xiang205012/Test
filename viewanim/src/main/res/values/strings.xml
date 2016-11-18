@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">ViewAnim</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="str_recorder_normal">按住 说话</string>
+    <string name="str_recorder_recording">松开 结束</string>
+    <string name="str_recorder_want_cancel">松开手指，取消发送</string>
+    <string name="str_recorder_to_short">录音时间过短</string>
+    <string name="str_recorder_to_up_cancel">手指上滑，取消发送</string>
+
+    <string name="weixin">微信</string>
+    <string name="actionbar_search">查找</string>
+    <string name="actionbar_add">添加</string>
+    <string name="menu_group_chat">发起群聊</string>
+    <string name="menu_feedback">意见反馈</string>
+    <string name="menu_addfrient">添加朋友</string>
+    <string name="menu_scan">扫一扫</string>
+    <string name="tab_contact">通讯录</string>
+    <string name="tab_found">发现</string>
+    <string name="tab_me">我</string>
+
+
+</resources>

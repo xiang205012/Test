@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CircleView">
+        <attr name="circleWidth" format="dimension"></attr>
+        <attr name="circleSize" format="dimension"></attr>
+        <attr name="circleColor" format="color"></attr>
+        <attr name="doubleColor" format="color"></attr>
+        <attr name="textColor" format="color"></attr>
+        <attr name="textSize" format="dimension"></attr>
+        <attr name="circleType">
+            <enum name="fill" value="0"></enum>
+            <enum name="storke" value="1"></enum>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ProgressBar">
+        <attr name="dotColor" format="color" />
+        <attr name="dotBgColor" format="color" />
+        <attr name="showMode">
+            <enum name="NULL" value="0" />
+            <enum name="PERCENT" value="1" />
+            <enum name="ALL" value="2" />
+        </attr>
+        <attr name="percentTextSize" format="dimension" />
+        <attr name="percentTextColor" format="color" />
+        <attr name="isPercentFontSystem" format="boolean"/>
+        <attr name="percentThinPadding" format="dimension"/>
+        <attr name="unitText" format="string"/>
+        <attr name="unitTextColor" format="color"/>
+        <attr name="unitTextSize" format="dimension"/>
+        <attr name="unitTextAlignMode">
+            <enum name="DEFAULT" value="0"></enum>
+            <enum name="CN" value="1"/>
+            <enum name="EN" value="2"/>
+        </attr>
+        <attr name="buttonText" format="string"/>
+        <attr name="buttonTextColor" format="color"/>
+        <attr name="buttonTextSize" format="dimension"/>
+        <attr name="buttonBgColor" format="color"/>
+        <attr name="buttonClickColor" format="color"/>
+        <attr name="buttonClickBgColor" format="color"/>
+        <attr name="buttonTopOffset" format="dimension"/>
+    </declare-styleable>
+
+
+
+</resources>

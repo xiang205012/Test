@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/gray_color"
+    android:layout_height="wrap_content">
+
+
+    <CheckBox
+        android:id="@+id/cb_child"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:minWidth="32dp"
+        android:button="@drawable/check_box_bg"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        />
+
+    <ImageView
+        android:id="@+id/iv_product"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/cb_child"
+        android:layout_centerVertical="true"
+        android:background="@drawable/goods1"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_product_info"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/iv_product"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="天猫商城1号店的第1个商品"/>
+
+        <TextView
+            android:id="@+id/tv_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tv_shop_name"
+            android:layout_alignLeft="@+id/tv_shop_name"
+            android:text="颜色："/>
+
+        <TextView
+            android:id="@+id/tv_product_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="黑色"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/tv_color"
+            android:layout_alignBaseline="@+id/tv_color"
+            />
+
+        <TextView
+            android:id="@+id/tv_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_product_color"
+            android:layout_alignBaseline="@+id/tv_product_color"
+            android:text="尺码："
+            android:textSize="14sp"
+            android:layout_marginLeft="20dp"/>
+
+        <TextView
+            android:id="@+id/tv_product_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_alignBaseline="@+id/tv_color"
+            android:layout_toRightOf="@+id/tv_size"
+            android:text="1瓶/斤"
+            />
+
+        <TextView
+            android:id="@+id/tv_product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_color"
+            android:layout_marginTop="10dp"
+            android:layout_alignLeft="@+id/tv_color"
+            android:text="¥20.0"
+            android:textSize="16sp"
+            android:textColor="@color/red"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <TextView
+            android:id="@+id/tv_product_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_product_price"
+            android:layout_toRightOf="@+id/tv_product_price"
+            android:text="¥12.0"
+            android:layout_marginLeft="20dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_product_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x4"
+            android:textSize="12sp"
+            android:layout_alignBaseline="@+id/tv_product_price"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_product_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/iv_product"
+        android:visibility="gone"
+        android:layout_marginLeft="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/tv_product_less"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/text__left_bg"
+            android:gravity="center"
+            android:text="一"/>
+
+        <TextView
+            android:id="@+id/tv_singleProductCount"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:text="5"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            android:layout_toRightOf="@+id/tv_product_less"/>
+
+        <TextView
+            android:id="@+id/tv_product_add"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/text__right_bg"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/tv_singleProductCount"
+            android:text="+"/>
+
+        <TextView
+            android:id="@+id/tv_product_edit_color1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_product_less"
+            android:layout_alignLeft="@+id/tv_product_less"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            android:text="颜色："/>
+        <TextView
+            android:id="@+id/tv_product_edit_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_product_edit_color1"
+            android:layout_alignBaseline="@+id/tv_product_edit_color1"
+            android:textSize="16sp"
+            android:text="黑色"/>
+        <TextView
+            android:id="@+id/tv_product_edit_size1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/tv_product_edit_color"
+            android:layout_alignBaseline="@+id/tv_product_edit_color1"
+            android:textSize="16sp"
+            android:text="尺码："/>
+        <TextView
+            android:id="@+id/tv_product_edit_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_product_edit_size1"
+            android:layout_alignBaseline="@+id/tv_product_edit_color1"
+            android:textSize="16sp"
+            android:text="40"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_product_edit_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="删除"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

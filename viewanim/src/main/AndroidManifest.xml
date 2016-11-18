@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xiang.viewanim" >
+
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+        <activity android:name=".anim.AnimMainActivity"/>
+        <activity android:name=".view.view_main.ViewMainActivity"/>
+        <activity android:name=".view.hongyang.HMainActivity"/>
+        <activity android:name=".view.hongyang.simple.textview.MyTextViewActivity"/>
+        <activity android:name=".view.hongyang.simple.volumControlBar.CustomVolumControlBarActivity"/>
+        <activity android:name=".view.hongyang.simple.CustomViewGroup.MyTestViewGroupActivity"/>
+        <activity android:name=".view.hongyang.simple.switchButton.SwitchButtonActivity"/>
+        <activity android:name=".view.QQ.parallaxListView.ParallaxListViewActivity"/>
+        <activity android:name=".view.QQ.QQMainActivity"/>
+        <activity android:name=".view.QQ.goo.GooActivity"/>
+        <activity android:name=".view.QQ.dragLayout.DragLayoutActivity"/>
+        <activity android:name=".view.QQ.swipeListView.SwipeListViewActivity"/>
+        <activity android:name=".view.comm.CustomViewActivity"/>
+        <activity android:name=".view.comm.StepBarView.StepBarViewActivity"/>
+        <activity android:name=".view.comm.TreeView.TreeViewActivity"/>
+        <activity android:name=".view.comm.progressbar.CircleDotProgressActivity"/>
+
+    </application>
+
+</manifest>

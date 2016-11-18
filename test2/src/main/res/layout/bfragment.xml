@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="第二个fragment"
+                android:textSize="30sp"/>
+
+            <Button
+                android:id="@+id/bt_test_pop"
+                style="@style/buttonStyle"
+                android:text="测试弹出框"/>
+            <Button
+                android:id="@+id/bt_test_azlistview"
+                style="@style/buttonStyle"
+                android:text="测试A--Z排序listview"/>
+            <Button
+                android:id="@+id/bt_test_topindicator"
+                style="@style/buttonStyle"
+                android:text="测试顶部导航栏滑动"/>
+            <Button
+                android:id="@+id/bt_test_topnavigetionbar"
+                style="@style/buttonStyle"
+                android:text="测试顶部导航栏滑动ss"/>
+            <Button
+                android:id="@+id/bt_test_MaterialDialog"
+                style="@style/buttonStyle"
+                android:text="测试MaterialDesign"/>
+            <Button
+                android:id="@+id/bt_test_ChatListView"
+                style="@style/buttonStyle"
+                android:text="测试聊天listview"/>
+            <Button
+                android:id="@+id/bt_test_face_discern"
+                style="@style/buttonStyle"
+                android:text="测试人脸识别"/>
+            <Button
+                android:id="@+id/bt_test_swipe_listview"
+                style="@style/buttonStyle"
+                android:text="测试侧滑listview"/>
+
+            <Button
+                android:id="@+id/bt_test_property_animation"
+                style="@style/buttonStyle"
+                android:text="测试属性动画"/>
+
+            <Button
+                android:id="@+id/bt_test_webview"
+                style="@style/buttonStyle"
+                android:text="测试webview"/>
+            <Button
+                android:id="@+id/bt_test_customcamera"
+                style="@style/buttonStyle"
+                android:text="测试自定义相机"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

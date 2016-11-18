@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_onefragment"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="30sp"
+        android:text="第一个fragmetn"
+        android:textColor="@android:color/black"/>
+
+    <EditText
+        android:id="@+id/et_onefragment"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="输入数据传给第二个fragment"/>
+
+    <Button
+        android:id="@+id/btn_onefragment"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="跳到第二个fragment并将返回值赋给TextView"/>
+
+</LinearLayout>

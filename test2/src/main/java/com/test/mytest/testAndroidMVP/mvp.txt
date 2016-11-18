@@ -1,0 +1,19 @@
+
+
+MVP之Model
+    Model 是用户界面需要显示数据的抽象，也可以理解为从业务数据（结果）那里到用户界面的抽象
+    （Business rule, data access, model classes）。本文 Demo 为了简单处理就直接把业务放到了对应的 Model 之中。
+
+MVP之View
+    视图这一层体现的很轻薄，负责显示数据、提供友好界面跟用户交互就行。
+    MVP下Activity和Fragment体现在了这一层，Activity一般也就做加载UI视图、
+    设置监听再交由Presenter处理的一些工作，所以也就需要持有相应Presenter的引用。
+    例如，Activity上滚动列表时隐藏或者显示Acionbar（Toolbar），这样的UI逻辑时也应该在这一层。
+    另外在View上输入的数据做一些判断时，例如，EditText的输入数据，假如是简单的非空判断则可以作为View层的逻辑，
+    而当需要对EditText的数据进行更复杂的比较时，如从数据库获取本地数据进行判断时明显需要经过Model层才能返回了，所以这些细节需要自己掂量。
+
+MVP之Presenter
+    Presenter这一层处理着程序各种逻辑的分发，收到View层UI上的反馈命令、定时命令、
+    系统命令等指令后分发处理逻辑交由业务层做具体的业务操作，然后将得到的 Model 给 View 显示。
+
+

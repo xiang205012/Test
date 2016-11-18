@@ -1,0 +1,12 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- 改变系统OverflowButton的样式，默认是三个点的 -->
+        <item name="android:actionOverflowButtonStyle">@style/myoverflowstyle</item>
+    </style>
+    <style name="myoverflowstyle">
+        <item name="android:src">@drawable/actionbar_add_icon</item>
+    </style>
+
+</resources>

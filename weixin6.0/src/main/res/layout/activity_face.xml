@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <Button
+       android:id="@+id/getImage"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentBottom="true"
+       android:text="获取图片"
+       />
+
+   <Button
+       android:id="@+id/btn_detect"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="检测图片"
+       android:layout_alignParentBottom="true"
+       android:layout_toLeftOf="@+id/getImage"
+       android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:id="@+id/tv_showMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_toLeftOf="@+id/btn_detect"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginRight="10dp"
+        android:text="显示检测的信息"/>
+
+    <ImageView
+        android:id="@+id/face_iv"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/t4"/>
+
+</RelativeLayout>

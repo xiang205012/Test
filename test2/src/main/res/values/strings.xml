@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">MyTest</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="ad">主页</string>
+    <string name="ac">问题件</string>
+    <string name="af">个人中心</string>
+
+    <string name="str_recorder_normal">按住 说话</string>
+    <string name="str_recorder_recording">松开 结束</string>
+    <string name="str_recorder_want_cancel">松开手指，取消发送</string>
+    <string name="str_recorder_to_short">录音时间过短</string>
+    <string name="str_recorder_to_up_cancel">手指上滑，取消发送</string>
+
+    <string name="weixin">微信</string>
+    <string name="actionbar_search">查找</string>
+    <string name="actionbar_add">添加</string>
+    <string name="menu_group_chat">发起群聊</string>
+    <string name="menu_feedback">意见反馈</string>
+    <string name="menu_addfrient">添加朋友</string>
+    <string name="menu_scan">扫一扫</string>
+    <string name="tab_contact">通讯录</string>
+    <string name="tab_found">发现</string>
+    <string name="tab_me">我</string>
+
+    <string name="jiesuan">结算(%1$d)</string>
+    <string name="heji"><Data><![CDATA[合计 : <font size="12" height="12dp" color="#ff0000">¥</font><font size="20" height="20dp" color="#ff0000"> %1$.2f</font> ]]></Data></string>
+    <!-- 貌似 size和height设置没效果，不知道咋搞
+        %1$.2f    .2f表示的是float型保留2位小数
+        String string = getResources().getString(R.string.heji);
+        String string2 = String.format(string,23.5);
+        Spanned string3 = Html.fromHtml(string2);
+        tv_sort_money.setText(string3);-->
+
+<!--
+1、整型，比如“我今年23岁了”，这个23是整型的。在string.xml中可以这样写，<string name="old">我今年%1$d岁了</string>
+
+在程序中，使用
+    String sAgeFormat = getResources().getString(R.string.old);
+    String sFinalAge = String.format(sAgeFormat, 23);
+    将%1$d替换为23；
+    %1$d表达的意思是整个name=”old”中，第一个整型的替代。如果一个name中有两个需要替换的整型内容，
+    则第二个写为：%2$d，以此类推；具体程序中替换见下面的string型；
+
+2、string型，比如“我的名字叫李四，我来自首都北京”；这里的“李四”和“首都北京”都需要替换。
+   在string.xml中可以这样写，<string name="alert">我的名字叫%1$s，我来自%2$s</string>
+    在程序中：
+    String sAgeFormat1 = getResources().getString(R.string.alert);
+    String sFinal1 = String.format(sAgeFormat1, "李四","首都北京");
+
+    这里两个string需要替换的，按照上面程序的顺序依次对应。
+    %d   （表示整数）
+
+    %f    （表示浮点数）
+
+    %s   （表示字符串）
+-->
+</resources>

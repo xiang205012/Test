@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_sort_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="购物车"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:background="#66756767"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:id="@+id/tv_sort_edtor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:text="编辑"/>
+    <RelativeLayout
+        android:id="@+id/rl_cart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_sort_top">
+        <ExpandableListView
+            android:id="@+id/sort_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rl_sort_bottom"
+            android:childIndicator="@null"
+            android:groupIndicator="@null"
+            />
+
+        <LinearLayout
+            android:id="@+id/rl_sort_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:background="#11756767"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_sort_all"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@drawable/check_box_bg"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="15dp"
+                android:paddingLeft="5dp"
+                android:text="全选"/>
+            <!-- android:paddingLeft="5dp" 控制图片和文字之间的距离
+                 android:checkMark="?android:attr/listChoiceIndicatorMultiple" 多选，single表示单选
+                 android:textAppearance="?android:attr/textAppearanceLarge" 使用系统的字体-->
+
+            <RelativeLayout
+                android:id="@+id/rl_pay"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical|right"
+                android:layout_height="match_parent"
+                android:paddingRight="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_sort_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/tv_go_to_pay"
+                    android:layout_centerVertical="true"
+                    android:text="@string/heji"/>
+                <TextView
+                    android:id="@+id/tv_yunfei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_sort_money"
+                    android:layout_toLeftOf="@+id/tv_go_to_pay"
+                    android:layout_centerVertical="true"
+                    android:text="不含运费"/>
+                <TextView
+                    android:id="@+id/tv_go_to_pay"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:text="@string/jiesuan"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:background="#ff0000"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_edtor_delete"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="收藏"/>
+                <Button
+                    android:id="@+id/btn_share"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="分享"/>
+                <Button
+                    android:id="@+id/btn_delete_all"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="删除"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/layout_cart_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <include
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/cart_empty"
+            android:visibility="gone"/>
+    </FrameLayout>
+</RelativeLayout>

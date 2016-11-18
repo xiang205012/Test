@@ -1,0 +1,102 @@
+
+Retrofit2:
+    转换HTTP API为Java接口
+    public interface GitHubService{
+        @GET("users/{user}/repos")
+        Call<List<Repo>> listRepos(@Path("user"),String user);
+        // GET中{}括号内表示可变的参数，需要在方法中声明，
+        // @Path:表示链接GET中声明的url路径,并且path中括号内的参数必须和{}括号内一致
+    }
+    使用Retrofit生成接口GitHubService的实现
+       Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("https://api.github.com/")
+                                .build();
+       GitHubService service = retrofit.create(GitHubService.class);
+    之后就可以直接调用生成GitHubService实例去发送同步或异步的请求了
+    通过调用Retrofit2的execute（同步）或者enqueue（异步）方法，
+    发送请求到网络服务器，并返回一个响应（Response）。
+        Call<List<Repo>> repos = service.listRepos("kebi");
+         // 最终的url: https://api.github.com/users/kebi/repos
+        //请求网络，异步
+        repos.enqueue(new Callback<List<Repo>>() {
+            @Override
+            public void onResponse(Response<List<Repo>> response, Retrofit retrofit) {
+                Log.d(TAG, "response:" + response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+        // 取消请求
+        call.cancel();
+
+
+    可以通过@Headers来添加请求头。
+    @Headers({
+            "Accept: application/vnd.github.v3.full+json",
+            "User-Agent: RetrofitBean-Sample-App",
+            "name:ljd"
+    })
+    @GET("repos/{owner}/{repo}/contributors")
+    Call<List<Contributor>> contributorsAndAddHeader(@Path("owner") String owner,
+                                        @Path("repo") String repo);
+
+    为URL指定查询参数。使用@Query即可。
+    @GET("search/repositories")
+    Call<RetrofitBean> queryRetrofitByGetCall(@Query("q")String owner,
+                                      @Query("since")String time,
+                                      @Query("page")int page,
+                                      @Query("per_page")int per_Page);
+    当我们的参数过多的时候我们可以通过@QueryMap注解和map对象参数来指定每个表单项的Key，value的值。
+    @GET("search/repositories")
+    Call<RetrofitBean> queryRetrofitByGetCallMap(@QueryMap Map<String,String> map);
+
+　　我们可以使用@FormUrlEncoded注解来发送表单数据。使用 @Field注解和参数来指定每个表单项的Key，value为参数的值。
+    @FormUrlEncoded
+    @POST("user/edit")
+    Call<User> updateUser(@Field("first_name") String first, @Field("last_name") String last);
+
+    @POST("blog") // post请求
+    Call<Result<Blog>> createBlog(@Body Blog blog);
+
+    当我们有很多个表单参数时可以通过@FieldMap注解和Map对象参数来指定每个表单项的Key，value的值。
+    @FormUrlEncoded
+    @POST("user/edit")
+    Call<User> updateUser(@FieldMap Map<String,String> fieldMap);
+
+    我们还可以通过@Multipart注解来发送Multipart数据。通过@Part注解来定义需要发送的文件。
+    @Multipart
+    @PUT("/user/photo")
+    User updateUser(@Part("photo") TypedFile photo, @Part("description") TypedString description);
+
+    更多详细讲解：http://www.jianshu.com/p/308f3c54abdd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

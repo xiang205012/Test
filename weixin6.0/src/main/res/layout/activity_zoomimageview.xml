@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <!-- <com.xiang.weixin60.zoomImageView.ZoomImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="matrix"
+        android:src="@drawable/testzoomimage3"
+        />-->
+
+    <!-- 将ZoomImageView放到ViewPager中 并解决冲突
+         将图片进行放大，但是放大后最大也就是屏幕大小不能平移了-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/zoomImageView_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>

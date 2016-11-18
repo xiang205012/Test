@@ -1,0 +1,194 @@
+
+自定义view:
+
+##一、
+    普通view事件分发机制：
+    ①触摸到了任何一个控件，就一定会调用该控件的dispatchTouchEvent方法，
+      此方法是第一个被执行的方法，其次是onTouch()--> onTouchEvent()--> onClick()...
+      事件在此顺序的传递过程中,如果前一个方法返回true,那后面的方法就不会执行,并最终回到dispatchTouchEvent方法
+        源码：
+        public boolean dispatchTouchEvent(MotionEvent event) {
+            if (mOnTouchListener != null && (mViewFlags & ENABLED_MASK) == ENABLED &&
+                    mOnTouchListener.onTouch(this, event)) {
+                return true;
+            }
+            return onTouchEvent(event);
+        }
+      第一个条件，mOnTouchListener这个变量是在setOnTouchListener(OnTouchListener listener)赋值的
+      第二个条件(mViewFlags & ENABLED_MASK) == ENABLED是判断当前点击的控件是否是enable的，
+        按钮默认都是enable的，但是也有些不是默认为enable的，如ImageView...。
+      第三个条件就比较关键了，mOnTouchListener.onTouch(this, event)，其实也就是去回调控件注册touch事件时的onTouch方法。
+        也就是说如果我们在onTouch方法里返回true，就会让这三个条件全部成立，从而整个方法直接返回true。
+        如果我们在onTouch方法里返回false，就会再去执行onTouchEvent(event)方法。
+      **注意：touch事件的传递，如果执行ACTION_DOWN时就返回false,那么后面move,up都不会执行了，这与前面的相反。
+
+    ②onTouch和onTouchEvent的区别和使用：
+        由①得知onTouch优先于onTouchEvent执行，如果onTouch返回true,那么onTouchEvent就不会执行了，
+        而onTouch能够执行需要两个条件，一是注册的onTouchListener事件，而是该控件必须是可以enable的，
+        如果要执行非enabel控件的onTouch事件就要重写onTouchEvent方法来实现
+
+
+    ViewGroup事件分发机制：
+        ①disallowIntercept是指是否禁用掉事件拦截的功能，默认是false，
+            也可以requestDisallowInterceptTouchEvent方法对这个值进行修改
+
+    图解：
+
+                                        开始
+                                         |
+                                         |
+                                       点击按钮
+                                         |
+                                         |
+                           ViewGroup的dispatchTouchEvent()方法
+                                         |
+                                         |
+                           MyLayout的onInterceptTouchEvent()方法
+                                         |
+                                         |
+                                     是否返回true？
+                                         |
+                                     是  ||  否
+                     --------------------------------------------
+                     |                                          |
+                     |                                          |
+          拦截掉MyLayout中子view的事件              Button的dispatchTouchEvent()方法
+                     |                                          |
+                     |                                          |
+       MyLayout的dispatchTouchEvent()方法                处理按钮的点击事件
+                     |                                          |
+                     |                                          |
+此时就回到了普通view的事件方式来处理MyLayout的touch事件         终止事件的继续传递
+                     |                                          |
+                     |                                          |
+                     |                                          |
+                     |----------------------结束-----------------|
+
+
+
+
+##二、
+    LayoutInflater机制：
+     有两种方法获得LayoutInflater:
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        LayotuInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+     更重要的是：inflater()方法
+        inflater(int resourceId,ViewGroup root);
+            第一个参数就是要加载的布局id，第二个参数是指给该布局的外部再嵌套一层父布局，如果不需要就直接传null。
+            这样就成功成功创建了一个布局的实例，之后再将它添加到指定的位置就可以显示出来了。
+        inflater(int resourceId,ViewGroup root,boolean attachToRoot);
+            1.如果root为null，attachToRoot将失去作用，设置任何值都没有意义。
+            2.如果root不为null，attachToRoot设为true，则会给加载的布局文件指定一个父布局，即root。
+            3.如果root不为null，attachToRoot设为false，则会将布局文件最外层所有layout属性进行设置，
+               当该view被添加到父view当中时，这些layout属性会自动生效。
+            4.在不设置attachToRoot参数的情况下，如果root不为null，attachToRoot参数默认为true。
+
+
+     View视图绘制机制：
+      每一个view的绘制要经过三个最主要的阶段，即onMeasure(),onLayout(),onDraw()
+      ① onMeasure()用于测量视图的大小(当自定义view在布局文件中设置成了wrap_content时可能得到的结果不是自己想要的，此时就要重写onMeasure自己来测量)
+        View系统的绘制流程会从ViewRoot的performTraversals()方法中开始，在其内部调用View的measure()方法。
+        measure()方法接收两个参数，widthMeasureSpec和heightMeasureSpec，这两个值分别用于确定视图的宽度和高度的规格和大小。
+        MeasureSpec的值由specSize和specMode共同组成的，其中specSize记录的是大小，specMode记录的是规格。
+        specMode一共有三种类型，如下所示：
+            1. EXACTLY(一般是设置了明确的值或者是MATCH_PARENT)
+                表示父视图希望子视图的大小应该是由specSize的值来决定的，系统默认会按照这个规则来设置子视图的大小，
+                开发人员当然也可以按照自己的意愿设置成任意的大小。
+
+            2. AT_MOST(子布局限制在一个最大值内，一般为WARP_CONTENT)
+                表示子视图最多只能是specSize中指定的大小，开发人员应该尽可能小得去设置这个视图，并且保证不会超过specSize。
+                系统默认会按照这个规则来设置子视图的大小，开发人员当然也可以按照自己的意愿设置成任意的大小。
+
+            3. UNSPECIFIED(子布局想要多大就多大)
+                表示开发人员可以将视图按照自己的意愿设置成任意的大小，没有任何限制。这种情况比较少见，不太会用到。
+
+            4.调用MeasureSpec.getMode()方法可以解析出specMode，调用MeasureSpec.getSize()方法可以解析出specSize。
+              接下来进行判断，如果specMode等于AT_MOST或EXACTLY就返回specSize，这也是系统默认的行为。
+              之后会在onMeasure()方法中调用setMeasuredDimension()方法来设定测量出的大小，这样一次measure过程就结束了。
+
+            5.需要注意的是，在setMeasuredDimension()方法调用之后，我们才能使用getMeasuredWidth()和getMeasuredHeight()来获取视图测量出的宽高，
+              以此之前调用这两个方法得到的值都会是0。
+
+      ② onLayout()measure过程结束后，视图的大小就已经测量好了，接下来就要确定它在父布局中的位置，也就是重写onLayout()来实现.
+            1.onLayout()方法接收四个参数，分别代表着左上右下的坐标，当然这个坐标是相对于当前视图的父视图而言的。
+
+            2.onLayout()方法中只能得到view在measure后的测量值而不是实际的大小（getMeasureWidth()和getMeasureHeight()）
+
+            3.onLayotu()过后，通过getWidth()和getHeight()才能得到view实际的大小
+
+            4.getMeasureWidth()方法在measure()过程结束后就可以获取到了，而getWidth()方法要在layout()过程结束后才能获取到。
+              另外，getMeasureWidth()方法中的值是通过setMeasuredDimension()方法来进行设置的，
+              而getWidth()方法中的值则是通过视图右边的坐标减去左边的坐标计算出来的。
+
+      ③ onDraw() measure和layout过程都结束了就执行onDraw绘制流程了，此部分查看爱哥自定义view博客有详细介绍
+
+    视图状态：
+        1. enabled
+            表示当前视图是否可用。可以调用setEnable()方法来改变视图的可用状态，传入true表示可用，传入false表示不可用。
+            它们之间最大的区别在于，不可用的视图是无法响应onTouch事件的。
+
+        2. focused
+            表示当前视图是否获得到焦点。通常情况下有两种方法可以让视图获得焦点，
+            即通过键盘的上下左右键切换视图，以及调用requestFocus()方法。而现在的Android手机几乎都没有键盘了，
+            因此基本上只可以使用requestFocus()这个办法来让视图获得焦点了。而requestFocus()方法也不能保证一定可以让视图获得焦点，
+            它会有一个布尔值的返回值，如果返回true说明获得焦点成功，返回false说明获得焦点失败。
+            一般只有视图在focusable和focusable in touch mode同时成立的情况下才能成功获取焦点，比如说EditText。
+
+        3. window_focused
+            表示当前视图是否处于正在交互的窗口中，这个值由系统自动决定，应用程序不能进行改变。
+
+        4. selected
+            表示当前视图是否处于选中状态。一个界面当中可以有多个视图处于选中状态，
+            调用setSelected()方法能够改变视图的选中状态，传入true表示选中，传入false表示未选中。
+
+        5. pressed
+            表示当前视图是否处于按下状态。可以调用setPressed()方法来对这一状态进行改变，
+            传入true表示按下，传入false表示未按下。通常情况下这个状态都是由系统自动赋值的，
+            但开发者也可以自己调用这个方法来进行改变。
+
+    视图重绘：
+        1.invalidate()必须是在UI线程中进行工作
+        2.postInvalidate()子线程中工作
+
+
+##三、
+    Canvas机制：
+        ① Rect和RectF都是矩形框，但精度不一样，Rect是使用int类型作为数值，RectF是float类型
+        ② Matrix常用于对图片的处理，分为四个基本类：Translate(平移)、Scale(缩放)、Rotate(旋转)、Skew(错切)
+            对于每一种变换都提供了三种操作方式：
+                set（用于设置Matrix中的值）、post（后乘，根据矩阵的原理，相当于左乘）、pre（先乘，相当于矩阵中的右乘）。
+                默认时，这四种变换都是围绕（0，0）点变换的，当然可以自定义围绕的中心点，通常围绕中心点。
+            matrix.setScale(interpolatedTime, interpolatedTime);
+            matrix.preTranslate(-centerX, -centerY);
+            matrix.postTranslate(centerX, centerY);
+            经常在中心缩放的应用中看到这段代码.
+            preTranslate是指在setScale前,平移,postTranslate是指在setScale后平移
+            注意他们参数是平移的距离,而不是平移目的地的坐标!
+            由于缩放是以(0,0)为中心的,所以为了把界面的中心与(0,0)对齐,就要preTranslate(-centerX, -centerY),
+            setScale完成后,调用postTranslate(centerX, centerY),再把图片移回来,这样看到的动画效果就是activity的界面图片从中心不停的缩放了
+            注:centerX和centerY是界面中心的坐标
+
+    ViewTreeObserver:
+        我们知道在oncreate中View.getWidth和View.getHeight无法获得一个view的高度和宽度，这是因为View组件布局要在onResume回调后完成。
+        所以现在需要使用getViewTreeObserver().addOnGlobalLayoutListener()来获得宽度或者高度。这是获得一个view的宽度和高度的方法之一。
+        OnGlobalLayoutListener 是ViewTreeObserver的内部类，当一个视图树的布局发生改变时，可以被ViewTreeObserver监听到，
+        这是一个注册监听视图树的观察者(observer)，在视图树的全局事件改变时得到通知。ViewTreeObserver不能直接实例化，而是通过getViewTreeObserver()获得。
+
+    onAttachedToWindow():
+        onResume()后面是onAttachedToWindow()，并且onAttachedToWindow只会调用一次，不会受用户操作行为影响。所以在onAttachedToWindow中进行窗口尺寸的修改再合适不过了。
+        onAttachedToWindow运行在onResume之后；
+        DecorView的LayoutParams是在ActivityThread的handleResumeActivity中设置的，并且该函数会调用Activity的onResume生命周期，所以在onResume之后可以设置窗体尺寸；
+
+
+
+
+
+
+
+
+
+
+
+
+

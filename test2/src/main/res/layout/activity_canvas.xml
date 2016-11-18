@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<com.gordon.test.testCustomView.canvas.CanvasView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />-->
+
+   <!-- <com.gordon.test.testCustomView.canvas.DialView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />-->
+    <com.gordon.test.testCustomView.circleProgress.CircleProgressBar
+        android:id="@+id/circleprogress1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        custom:circleWidth="5dp"
+        custom:circleColor="#897678"
+        custom:textIsDisplayable="true"
+        custom:progressColor="#ffff0000"
+        custom:progressTextColor="#666677"
+        custom:progressTextSize="18sp"
+        custom:paintStyle="STROKE"
+        />
+
+    <com.gordon.test.testCustomView.circleProgress.CircleProgressBar
+        android:id="@+id/circleprogress2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentRight="true"
+        custom:circleWidth="5dp"
+        custom:circleColor="#897678"
+        custom:textIsDisplayable="false"
+        custom:progressColor="#ffff0000"
+        custom:paintStyle="FILL"
+        />
+
+
+    <com.gordon.test.testCustomView.canvas.ControllerBar
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+
+        />
+
+
+    <Button
+        android:id="@+id/test_circleProgress"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:text="开始"
+        style="@style/buttonStyle" />
+
+</RelativeLayout>

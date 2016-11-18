@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/recycler_item_add"
+        android:title="增加item"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/recycler_item_delete"
+        android:title="删除item"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/recycler_horizontal_listview"
+        android:title="listview水平模式"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/recycler_vertical_listview"
+        android:title="listview垂直模式"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/recycler_horizontal_gridview"
+        android:title="gridview水平模式"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/recycler_vertical_gridview"
+        android:title="gridview垂直模式"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/recycler_vertical_staggeredgridview"
+        android:title="垂直瀑布流模式"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
+</menu>

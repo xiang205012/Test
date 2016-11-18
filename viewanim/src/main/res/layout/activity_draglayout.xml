@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiang.viewanim.view.QQ.dragLayout.DragLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/qq_draglayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/qq_draglayout_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:paddingRight="15dp"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/left_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/qq_draglayout_head"/>
+
+        <ListView
+            android:id="@+id/left_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:divider="@android:color/white"
+            android:dividerHeight="1dp"></ListView>
+
+    </LinearLayout>
+
+    <com.xiang.viewanim.view.QQ.dragLayout.MyLinearLayout
+        android:id="@+id/my_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/blue">
+
+            <ImageView
+                android:id="@+id/main_iv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/qq_draglayout_head"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="仿QQ主面板"/>
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/main_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/black"
+            android:dividerHeight="1dp"></ListView>
+
+    </com.xiang.viewanim.view.QQ.dragLayout.MyLinearLayout>
+
+</com.xiang.viewanim.view.QQ.dragLayout.DragLayout>

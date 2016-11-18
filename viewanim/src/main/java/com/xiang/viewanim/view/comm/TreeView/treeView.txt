@@ -1,0 +1,27 @@
+
+
+原理：就是将数据封装成树形结构
+
+        FileDir
+
+ childFile    FileDir
+
+        childFile   FileDir
+
+              childFile   childFile....
+
+
+  Bean ---> Node  数据Bean转为树形中的节点
+
+  转化过程中我们必须拿到数据的id,pid
+  但是由于各个bean数据中的id命名规范不一样，所以通过反射+注解来拿
+
+
+
+
+
+
+
+
+
+

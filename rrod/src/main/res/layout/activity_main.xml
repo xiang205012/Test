@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.gordon.rrod.MainActivity">
+
+    <Button
+        android:id="@+id/btn_dagger2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="dagger2" />
+    <Button
+        android:id="@+id/btn_rxjava"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="rxjava" />
+    <Button
+        android:id="@+id/btn_retrofit2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="retrofit2" />
+    <Button
+        android:id="@+id/btn_okhttp3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="okhttp3" />
+    <Button
+        android:id="@+id/btn_simple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="综合实例" />
+
+</LinearLayout>

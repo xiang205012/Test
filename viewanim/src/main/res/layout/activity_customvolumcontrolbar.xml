@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.xiang.viewanim.view.hongyang.simple.volumControlBar.CustomVolumControlBar
+        android:id="@+id/customvolumcontrolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:CustomVolumControlBar_circleWidth="10dp"
+        custom:CustomVolumControlBar_icon="@drawable/ic_launcher"
+        custom:CustomVolumControlBar_firstColor="#ff766657"
+        custom:CustomVolumControlBar_secondColor="#ffff0000"
+        custom:CustomVolumControlBar_split="20"
+        custom:CustomVolumControlBar_total="15"
+        />
+
+
+</LinearLayout>

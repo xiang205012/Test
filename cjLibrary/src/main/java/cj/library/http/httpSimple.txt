@@ -1,0 +1,99 @@
+
+配置条件：
+eclipse
+	compile files('libs/okhttp-2.5.0.jar')
+	compile files('libs/okio-1.6.0.jar')
+	compile files('libs/volly-1.0.11.jar')
+    compile files('libs/gson-2.4.jar')
+    compile files('libs/org.apache.http.legacy.jar')
+
+studio
+	compile files('libs/org.apache.http.legacy.jar')
+	其他的直接open module settins添加(不需要okio-1.6.0)
+---------------------------------------------------------------
+
+executeRequest(new GsonRequest<MyClass>(VolleyApi.GSON_TEST, MyClass.class,
+						responseListener(), errorListener()));
+
+private Response.Listener<MyClass> responseListener() {
+		return new Response.Listener<MyClass>() {
+			@Override
+			public void onResponse(MyClass response) {
+				mTvResult.setText(new Gson().toJson(response));
+			}
+		};
+	}
+
+-----------------------------------------------------------------
+ImageLoader imageLoader = RequestManager.getImageLoader();
+				mImageView.setImageUrl(//mImageView是NetworkImageView
+								"http://c.hiphotos.baidu.com/image"
+								+ "/w%3D1280%3Bcrop%3D0%2C0%2C1280%2C800"
+								+ "/sign=2abcf809eb24b899de3c7d3a563626f6"
+								+ "/43a7d933c895d143afcf362a71f082025aaf0779.jpg",
+								imageLoader);
+
+--------------------------------------------------------------------------
+executeRequest(new JsonObjectRequest(Method.GET, VolleyApi.JSON_TEST, null,
+						responseListener(), errorListener()));
+
+private Response.Listener<JSONObject> responseListener() {
+		return new Response.Listener<JSONObject>() {
+			@Override
+			public void onResponse(JSONObject response) {
+				mTvResult.setText(response.toString());
+			}
+		};
+	}
+
+-------------------------------------------------------------------------
+executeRequest(new StringRequest(Method.POST, VolleyApi.POST_TEST,
+						responseListener(),
+						errorListener()) {
+					protected Map<String, String> getParams() {
+						return new ApiParams().with("param1", "02").with("param2", "14");
+					}
+				});
+
+private Response.Listener<String> responseListener() {
+		return new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				mTvResult.setText(response);
+			}
+		};
+	}
+
+final String URL = "/volley/resource/12";
+HashMap params = new HashMap();
+params.put("token", "AbCdEfGh123456");
+JsonObjectRequest req = new JsonObjectRequest(URL, new JSONObject(params),
+       new Response.Listener() {},errorlistener(){});
+
+------------------------------------------------------------------
+executeRequest(new StringRequest(Method.GET, VolleyApi.BAIDU,
+						responseListener(),
+						errorListener()));
+
+private Response.Listener<String> responseListener() {
+		return new Response.Listener<String>() {
+			@Override
+			public void onResponse(String response) {
+				//mTvResult.setText(response);
+				Log.i("TAG",response);
+			}
+		};
+	}
+
+-----------------------------------------------------------------------
+executeRequest(new XMLRequest(Method.GET, VolleyApi.XML_TEST,
+						responseListener(),errorListener()));
+
+private Response.Listener<XmlPullParser> responseListener() {
+		return new Response.Listener<XmlPullParser>() {
+			@Override
+			public void onResponse(XmlPullParser  response) {
+				mTvResult.setText(response.toString());
+			}
+		};
+	}

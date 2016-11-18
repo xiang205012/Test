@@ -1,0 +1,305 @@
+
+Dagger2要实现一个完整的依赖注入，必不可少的元素有三种，Module，Component,Container。
+
+    Container就是可以被注入的容器，具体对应上文例子中的Container，Container拥有需要被初始化的元素。
+    需要被初始化的元素必须标上@Inject，只有被标上@Inject的元素才会被自动初始化。
+    @Inject在Dagger2中一般标记构造方法与成员变量。
+
+    Module 可以说就是依赖的原材料的制造工厂，所有需要被注入的元素的实现都是从Module生产的。
+
+    有了可以被注入的容器Container，也有了提供依赖对象的Module。
+    我们必须将依赖对象注入到容器中，这个过程由Component来执行。
+    Component将Module中产生的依赖对象自动注入到Container中。
+
+
+@provides：添加注解@Provides注明该方法是用来提供依赖对象的特殊方法
+一个完整的Module必须拥有@Module与@Provides注解
+    Module中@Provides方法可以带输入参数，
+    其参数有Module集合中的其他@Provides方法提供
+    如：
+    @Module
+    public class FruitModule{
+        @Provides
+        public Fruit provideFruit(Color color){
+            return new Apple(color,Size.BIG);
+        }
+
+        @Provides
+        public Color provideFruit(){
+            return Color.RED;
+        }
+        // 第二个方法的返回值是第一个方法的参数
+    }
+    如果找不到@Provides方法提供对应参数的对象，
+    自动调用带@Inject参数的构造方法生成相应对象
+    如：
+    @Module
+    public class FruitModule{
+        @Provides
+        public Fruit provideFruit(FruitInfo info){
+            return new Apple(info);
+        }
+    }
+    对应的FruitInfo类
+    public class FruitInfo{
+        Color mColor;
+        Size mSize;
+
+        @Inject
+        FruitInfo(Color color,Size size){
+            mColor = color;
+            mSize = size;
+        }
+    }
+
+添加多个Module
+
+一个Component可以包含多个Module，这样Component获取依赖时候会自动从多个Module中查找获取，
+Module间不能有重复方法。添加多个Module有两种方法，一种是在Component的注解@Component(modules={××××，×××})
+ 添加多个modules，如下
+
+@Component(modules={ModuleA.class,ModuleB.class,ModuleC.class}) //添加多个Module
+public interface FruitComponent{
+    ...
+}
+
+另外一种添加多个Module的方法可以被使用Module中的@Module（includes={××××，×××}）,如下
+
+@Module(includes={ModuleA.class,ModuleB.class,ModuleC.class})
+public class FruitModule{
+    ...
+}
+@Component(modules={FruitModule.class}) //添加多个Module
+public interface FruitComponent{
+    ...
+}
+
+这种使用Module的includes的方法一般用于构建更高层的Module时候使用。
+
+Module实例的创建
+
+上面简单例子中，当调用DaggerFruitComponent.creaete(）
+实际上等价于DaggerFruitComponent.builder().build()。
+可以看出，DaggerFruitComponent使用了构造者模式。在构建的过程中，
+默认使用Module无参构造器产生实例。如果需要传入特定的Module实例，可以使用
+
+DaggerFruitComponent.builder()
+.moduleA(new ModuleA()) //指定Module实例
+.moduleB(new ModuleB())
+
+如果Module只有有参构造器，则必须显式传入Module实例。
+
+
+Component定义方法的规则
+
+1）对应上面苹果容器的例子，Component的方法输入参数一般只有一个，
+       对应了需要注入的Container。有输入参数返回值类型就是void
+2）Component的方法可以没有输入参数，但是就必须有返回值：
+Step1：返回的实例会先从事先定义的Module中查找，如果找不到跳到Step2
+Step2 : 使用该类带@Inject的构造器来生成返回的实例，并同时也会递归注入构造器参数以及带@Inject的成员变量。比如
+
+//定义ComponentB
+@Component(modules={××××××××})//1.假设Module中没有provideApp()方法,但有provideInfo()
+interface ComponentB{
+    Apple apple(); //2.实现类自动返回由Apple(info)构建的实现类
+}
+public class Apple{
+    @Inject
+    Apple(Info info){//被@Inject标记，使用这个构造器生成实例
+        ...
+    }
+    Apple(){   //不会使用这个构造器，没有被@Inject标记
+    }
+}
+
+上述代码会生成ComponentB的实现类DaggerComponetB,调用其apple()方法会自动使用Apple(info)构造器生成实例返回。
+3 ) 假设ComponentA依赖ComponentB，B必须定义带返回值的方法来提供A缺少的依赖
+ComponentA依赖ComponentB的代码如下
+
+//定义ComponentB
+@Component(modules={××××××××})
+interface ComponentB{
+    ...
+}
+//定义ComponentA
+@Component(dependencies={ComponentB.class},modules={××××××××})//使用dependencies
+interface ComponentA{
+    ...
+}
+
+这样，当使用ComponentA注入Container时，如果找不到对应的依赖，就会到ComponentB中查找。
+但是，ComponentB必须显式把这些A找不到的依赖提供给A。怎么提供呢，只需要在ComponentB中添加方法即可，如下
+
+@Component(modules={××××××××})
+interface ComponentB{
+    // 假设A中module中找不到apple，banana，oranges，但是B的module有，B必须提供带返回值的方法如下
+    Apple apple();
+    Banana banana();
+    Oranges oranges();
+}
+
+Container中的@Inject的规则
+
+1）@Inject可以标记Container中的成员变量，但是这些成员变量要求是包级可见，也就是说@Inject不可以标记private类型的成员变量。
+2）当@Inject标记成员变量时，查找对应依赖按照以下规则
+
+1.该成员变量的依赖会从Module的@Provides方法集合中查找；
+2.如果查找不到，则查找成员变量类型是否有@Inject构造方法，并注入构造方法且递归注入该类型的成员变量
+
+SubComponent 和 dependencies的区别：
+    子Component跟前面的一个Component依赖另一个Component有点像，
+    区别是子Component可以获取到父Component的所有可以生产出的对象，
+    而Component依赖则只能获取到被依赖的Component所暴露出来的可以生产的对象。
+
+
+@Singleton:单例
+Java中，单例通常保存在一个静态域中，这样的单例往往要等到虚拟机关闭时候，该单例所占用的资源才释放。
+但是，Dagger通过Singleton创建出来的单例并不保持在静态域上，而是保留在Component实例中。
+要理解这一点，请看下面代码，续上文中的例子
+public class Test{
+    public static void main(String... args){
+        //c1,c2是不同对象，它们各自缓存machine
+        JuiceComponent c1=DaggerJuiceComponent.create();
+        JuiceComponent c2=DaggerJuiceComponent.create();
+        c1.inject(container1);
+        c1.inject(container2);
+        c2.inject(container3);
+        c2.inject(container4);
+        System.out.println(conainter1.machine==conainter2.machine);//true
+        System.out.println(conainter2.machine==conainter3.machine);//false
+        System.out.println(conainter3.machine==conainter4.machine);//true
+        System.out.println(conainter4.machine==conainter1.machine);//false
+    }
+}
+
+c1前后两次分别注入container1，container2，每个Component对象保留各自的单例对象，
+而container1，container2都是使用c1来注入machine，所以他们的machine对象是相同的。
+而container2与container3分别使用c1，c2来注入machine，所以他们的machine对象是不同的。
+
+自定义Scope
+
+@Singleton就是一种Scope注解，也是Dagger2唯一自带的Scope注解,下面是@Singleton的源码
+
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface Singleton{}
+
+可以看到定义一个Scope注解，必须添加以下三部分：
+@Scope ：注明是Scope
+@Documented ：标记在文档
+@Retention(RUNTIME) ：运行时级别
+
+对于Android，我们通常会定义一个针对整个APP全生命周期的@PerApp的Scope注解,通过仿照@Singleton
+
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface PerApp{}
+
+一般来说，我们通常还会定义一个针对一个Activity生命周期的@PerActivity的Scope注解，类似地：
+
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface PerActivity{}
+
+为何我们要定义多个Scope，使用自带的Singleton不好么？这是因为使用Scope有两方面的好处：
+一方面是为了给Singleton定义一个别名，这样看到这个别名，你就知道这个Singleton的有效范围。
+比如你可以定义一个@PerApp
+
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface PerApp{}
+
+@Module
+class MachineModule{
+    @PerApp//1.添加@PerApp标明该方法只产生一个实例
+    @Provides
+    Machine provideFruitJuiceMachine(){
+        return new FruitJuiceMachine();
+    }
+}
+
+@PerApp//2.添加@PerApp标明该Component中有Module使用了@PerApp
+@Component(modules=MachineModule.class)
+class JuiceComponent{
+    void inject(Container container)
+}
+
+//3.单例的有效范围随着其依附的Component，为了使得@PerApp的作用范围是整个Application，你需要添加以下代码
+public class CustomApp extends Application{
+    private static JuiceComponent mComponent;// 注意是静态
+    public void onCreate(){
+        mComponent=DaggerJuiceComponent.create();
+    }
+    public static JuiceComponent getComponent(){ //供给调用
+        return mComponent;
+    }
+}
+
+类似的，你也可以定义一个@PerActivity，有效范围是当前这个Activity,如下：
+
+//限于篇幅有限，只写出对应@PerActivity所对应的Component的存储位置
+public class CustomActivity extends Activity{
+    private PerActivityComponent mComponent;    //非静态，除了针对整个App的Component可以静态，其他一般都不能是静态的。
+    public void onCreate(bundle savedInstanceState){
+        mComponent=DaggerPerActivityComponent.create();
+    }
+}
+
+另一方面，如果两个Component间有依赖关系，那么它们不能使用相同的Scope。如果使用相同的Scope会带来语义混乱。考虑以下情况：
+
+Component1 c1 = Dagger_Component1.create();
+Component2 c2_a = Dagger_Component2.builder().component1(c1).build();
+Component2 c2_b = Dagger_Component2.builder().component1(c1).build();
+
+我们先设
+1.c1中有单例V
+2.假设Component1与Component2有相同的Scope
+3.Component2依赖Component1
+推出以下矛盾
+1.由于Component1跟Component2具有相同的Scope，而c2_a,c2_b是Component2的不同实例，所以c2_a,c2_b应该具备不同的V
+2.由于c2_a,c2_b的V都是存在c1中，而且在c1中应该具备唯一的V，所以c2_a,c2_b应该具备相同的V。
+所以推出矛盾，证明依赖的Component间不能使用相同的Scope。
+
+fragment的问题，因为其诡异的生命周期，所以建议在实在需要fragment的时候，
+让activity去创建component，fragment通过接口（比如HasComponent）
+去获得component（一个activity只能inject一个component哦）。
+1.创建接口HasComponent
+    public interface HasComponent<C>{
+        C getComponent();
+    }
+
+2.activity实现该接口并定义好要获取那个Component,重写方法
+    public Activity implements HasComponent<TestHasComponent>{
+        TestHasComponent testHasComponent;
+
+        public void onCreate(Bundle savedInstanceState){
+            testHasComponent = DaggerTestHasComponent
+                                .builder()
+                                .xxxxx     // TestHasComponent中声明的Module
+                                .build();
+        }
+
+        @Overrid
+        public TestHasComponent getComponent(){
+            return testHasComponent;
+        }
+    }
+
+3.fragment中获取Component
+    public Fragmnet {
+        @Inject
+        Object object;// testHasComponent中的Module中声明的类
+        public void onCreate(Bundle savedInstanceState){
+            // 获取并注入
+            getActivity().getComponent().inject(this);
+        }
+
+        public void onCreateView(.....){
+            object.xxxx();
+        }
+
+    }

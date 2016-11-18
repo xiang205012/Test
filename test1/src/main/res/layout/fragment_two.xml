@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_twofragment"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textSize="30sp"
+        android:text="从第一个来的数据"
+        android:textColor="@android:color/black"/>
+
+    <EditText
+        android:id="@+id/et_twofragment"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        />
+    <Button
+        android:id="@+id/cancel_two"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="销毁当前fragment，将et的内容返回给第一个"/>
+
+</LinearLayout>

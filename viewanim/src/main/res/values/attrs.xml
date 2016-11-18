@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MyTextView">
+        <attr name="mytextview_text" format="string"></attr>
+        <attr name="mytextview_color" format="color"></attr>
+        <attr name="mytextview_size" format="dimension"></attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="CustomVolumControlBar">
+        <attr name="CustomVolumControlBar_firstColor" format="color"></attr>
+        <attr name="CustomVolumControlBar_secondColor" format="color"></attr>
+        <attr name="CustomVolumControlBar_circleWidth" format="dimension"></attr>
+        <attr name="CustomVolumControlBar_total" format="integer"></attr>
+        <attr name="CustomVolumControlBar_split" format="integer"></attr>
+        <attr name="CustomVolumControlBar_icon" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="ProgressCircleView">
+        <attr name="cicrleColor" format="color"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="StepBarView">
+        <attr name="lineHeight" format="dimension"/>
+        <attr name="unDoneRadius" format="dimension"/>
+        <attr name="doneRadius" format="dimension"/>
+        <attr name="unDoneColor" format="color"/>
+        <attr name="doneColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="CircleDotProgressBar">
+        <attr name="progressMax" format="integer"/>
+        <attr name="dotColor" format="color"/>
+        <attr name="dotBgColor" format="color"/>
+
+        <attr name="showMode">
+            <enum name="NULL" value="0"/>
+            <enum name="PERCENT" value="1"/>
+            <enum name="ALL" value="2"/>
+        </attr>
+
+        <attr name="percentTextSize" format="dimension"/>
+        <attr name="percentTextColor" format="color"/>
+        <attr name="isPercentFontSystem" format="boolean"/>
+        <attr name="percentThinPadding" format="integer"/>
+        <attr name="unitText" format="string"/>
+        <attr name="unitTextSize" format="dimension"/>
+        <attr name="unitTextColor" format="color"/>
+
+        <attr name="unitTextAlignMode">
+            <enum name="DEFAULT" value="0"/>
+            <enum name="CN" value="1"/>
+            <enum name="EN" value="2"/>
+        </attr>
+
+        <attr name="buttonText" format="string"/>
+        <attr name="buttonTextSize" format="dimension"/>
+        <attr name="buttonTextColor" format="color"/>
+        <attr name="buttonBgColor" format="color"/>
+        <attr name="buttonClickColor" format="color"/>
+        <attr name="buttonClickBgColor" format="color"/>
+        <attr name="buttonTopOffset" format="dimension"/>
+
+    </declare-styleable>
+
+</resources>

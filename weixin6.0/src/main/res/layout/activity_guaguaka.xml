@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gua_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.xiang.weixin60.guaguaka.GuaGuaKaView
+        android:id="@+id/guaguaview"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        gua_view:gua_view_textInfo="谢谢惠顾"
+        gua_view:gua_view_textColor="@color/black"
+        gua_view:gua_view_textSize="20sp"
+        gua_view:gua_view_outterColor="@color/gray"
+        gua_view:gua_view_bitmap="@drawable/fg_guaguaka"
+        gua_view:gua_view_strokeWidth="20"
+        />
+
+</RelativeLayout>

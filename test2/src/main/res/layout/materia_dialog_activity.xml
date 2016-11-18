@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/base_dialog"
+            style="@style/buttonStyle"
+            android:text="基本的dialog，没找到监听的方法"/>
+        <Button
+            android:id="@+id/alert_dialog"
+            style="@style/buttonStyle"
+            android:text="警告dialog"/>
+        <Button
+            android:id="@+id/list_dialog"
+            style="@style/buttonStyle"
+            android:text="列表dialog"/>
+
+        <Button
+            android:id="@+id/bt_cardview"
+            style="@style/buttonStyle"
+            android:text="cardview"/>
+        <Button
+            android:id="@+id/bt_toolbar"
+            style="@style/buttonStyle"
+            android:text="toolbar"/>
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>

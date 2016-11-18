@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TabWidget">
+        <attr name="bottom_labels" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="ViewFlow">
+        <attr name="sidebuffer" format="integer" />
+    </declare-styleable>
+
+    <!-- 圆形进度条  -->
+    <declare-styleable name="CircleProgressBar">
+        <attr name="circleWidth" format="dimension"/>
+        <attr name="circleColor" format="color"/>
+        <attr name="progressColor" format="color"/>
+        <attr name="progressMax" format="integer"/>
+        <attr name="progressTextSize" format="dimension"></attr>
+        <attr name="progressTextColor" format="color"/>
+        <attr name="textIsDisplayable" format="boolean"/>
+        <attr name="paintStyle">
+            <enum name="STROKE" value="0"/>
+            <enum name="FILL" value="1"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="ControllerBar">
+        <attr name="defaultColor" format="color"/>
+        <attr name="selectorColor" format="color"/>
+        <attr name="totalCount" format="integer"/>
+        <attr name="bg" format="reference"/>
+        <attr name="pathWidth" format="dimension"/>
+        <attr name="spliteSize" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="ViewPagerIndicator">
+        <attr name="tabCount" format="integer"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="CalendarCard">
+        <attr name="showLunar" format="boolean"/>
+        <attr name="showPastAndNext" format="boolean"/>
+        <attr name="textColor" format="color"/>
+        <attr name="circleBgColor" format="color"/>
+
+    </declare-styleable>
+
+
+</resources>

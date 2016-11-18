@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- 不要用LinearLayout,否则按照下面的布局菜单显示不出来 -->
+
+  <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+    <include layout="@layout/satallitemenu_right_bottom"/>
+
+    <!--<include layout="@layout/satallitemenu_left_top"/>-->
+
+</RelativeLayout>

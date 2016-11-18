@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:padding="25dp" >
+
+        <TextView
+            style="@style/textStyle"
+            android:text="收货人" />
+
+        <EditText
+            android:id="@+id/et_consignee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="张三" />
+
+        <TextView
+            style="@style/textStyle"
+            android:text="联系方式" />
+
+        <EditText
+            android:id="@+id/et_consignee_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="14342344" />
+
+        <TextView
+            style="@style/textStyle"
+            android:text="详细地址" />
+
+        <EditText
+            android:id="@+id/et_consignee_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="广州市海珠区" />
+
+        <TextView
+            style="@style/textStyle"
+            android:text="邮政编码" />
+
+        <EditText
+            android:id="@+id/et_consignee_postcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="510260" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_save_consignee_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.3"
+        android:background="#3389CA"
+        android:textColor="@android:color/white"
+        android:text="保存并使用"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
+
+</LinearLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/to_recyclerviewactivity"
+            style="@style/buttonStyle"
+            android:text="跳转到recyclerviewactivity"/>
+
+        <Button
+            android:id="@+id/to_StickyScrollViewActivity"
+            style="@style/buttonStyle"
+            android:text="跳转到StickyScrollViewActivity"/>
+
+        <Button
+            android:id="@+id/to_VolleyImageActivity"
+            style="@style/buttonStyle"
+            android:text="testVolleyLoadImage"/>
+
+        <Button
+            android:id="@+id/to_CamerActivity"
+            style="@style/buttonStyle"
+            android:text="testCamerActivity"/>
+
+        <Button
+            android:id="@+id/to_ormLite"
+            style="@style/buttonStyle"
+            android:text="测试ORMLite数据库框架"/>
+
+        <Button
+            android:id="@+id/to_popwindow"
+            style="@style/buttonStyle"
+            android:text="测试popwindow"/>
+        <Button
+            android:id="@+id/to_custom_calendar"
+            style="@style/buttonStyle"
+            android:text="测试自定义日历"/>
+
+        <Button
+            android:id="@+id/to_custom_view"
+            style="@style/buttonStyle"
+            android:text="测试自定义view"/>
+
+        <Button
+            android:id="@+id/to_anim_viewpager"
+            style="@style/buttonStyle"
+            android:text="测试viewpager动画"/>
+
+        <Button
+            android:id="@+id/to_observer"
+            style="@style/buttonStyle"
+            android:text="测试观察者"/>
+
+        <Button
+            android:id="@+id/to_viewPagerIndicator"
+            style="@style/buttonStyle"
+            android:text="测试自定义viewPager指示器"/>
+
+        <Button
+            android:id="@+id/to_meituantagmenu"
+            style="@style/buttonStyle"
+            android:text="测试仿淘宝购物车列表选择"/>
+
+    </LinearLayout>
+</ScrollView>

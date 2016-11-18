@@ -1,0 +1,82 @@
+
+    Path mPath = new Path();
+    mPath.moveTo(0, -50);
+    mPath.lineTo(-20, 60);
+    mPath.lineTo(0, 50);
+    mPath.lineTo(20, 60);
+    mPath.close();
+    canvas.drawPath(mPath,mPaint);
+
+    这是在构造函数中首先初始化的一个path，就是一个箭头的轮廓，
+    这里要注意的是第一句和最后一句，第一句是开始的基点，
+    最后一句是把整个路径封闭死，即把开始的点和最后的点连接在一起，构成一个封闭图形。
+    让然如果你的笔触设置是full而不是STROKE，那么看起来是没有变化的
+    后面就是将这个图形显示在屏幕上
+
+
+对于Android游戏开发或者说2D绘图中来讲Path路径可以用强大这个词来形容。在Photoshop中我们可能还记得使用钢笔工具绘制路径的方法。Path路径类在位于android.graphics.Path中，Path的构造方法比较简单，如下
+
+   Path cwj = new Path();  //构造方法
+
+   下面我们画一个封闭的原型路径，我们使用Path类的addCircle方法
+
+   cwj.addCircle(10,10,50,Direction.CW); //参数一为x轴水平位置，参数二为y轴垂直位置，第三个参数为圆形的半径，最后是绘制的方向，CW为顺时针方向，而CCW是逆时针方向。
+
+    结合Android上次提到的Canvas类中的绘制方法drawPath和drawTextOnPath，我们继续可以在onDraw中加入。
+
+   canvas.drawPath(cwj,paintPath); //Android123提示大家这里paintPath为路径的画刷颜色，可以见下文完整的源代码。
+
+   canvas.drawTextOnPath("Android123 - CWJ",cwj,0,15,paintText); //将文字绘制到路径中去，有关drawTextOnPath的参数如下:
+
+   方法原型public void drawTextOnPath (String text, Path path, float hOffset, float vOffset, Paint paint)
+     参数列表:
+
+        text  为需要在路径上绘制的文字内容。
+
+        path 将文字绘制到哪个路径。
+
+        hOffset   距离路径开始的距离
+            vOffset   离路径的上下高度，这里Android开发网提示大家，该参数类型为float浮点型，除了精度为8位小数外，可以为正或负，当为正时文字在路径的圈里面，为负时在路径的圈外面。
+              paint  最后仍然是一个Paint对象用于制定Text本文的颜色、字体、大小等属性。
+
+  下面是我们的onDraw方法中如何绘制路径的演示代码为:
+
+[java] view plain?
+
+    <span style="font-size:16px;">   @Override
+       protected void onDraw(Canvas canvas) {
+
+        Paint paintPath=new Paint();
+
+        Paint paintText=new Paint();
+
+        paintPath.setColor(Color.Red); //路径的画刷为红色
+
+        paintText.setColor(Color.Blue); //路径上的文字为蓝色
+
+        Path pathCWJ=new Path();
+
+        pathCWJ.addCircle(10,10,50,Direction.CW); // 半径为50px，绘制的方向CW为顺时针
+
+        canvas.drawPath(pathCWJ,paintPath);
+
+       canvas.drawTextOnPath("Android123 - CWJ",pathCWJ,0,15,paintText); //在路径上绘制文字
+      }</span>
+
+    有关路径的高级效果大家可以使用PathEffect类.
+
+
+path详细介绍：
+http://ghui.me/post/2015/10/android-graphics-path/
+http://www.cnblogs.com/tianzhijiexian/p/4301113.html
+https://segmentfault.com/a/1190000000723053
+
+
+
+
+
+
+
+
+
+

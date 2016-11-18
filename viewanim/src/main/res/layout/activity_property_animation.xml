@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/iv_property"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ic_launcher"/>
+
+
+    <Button
+        android:id="@+id/btn_property_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="20dp"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/iv_property1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/b"/>
+        <ImageView
+            android:id="@+id/iv_property2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/c"/>
+        <ImageView
+            android:id="@+id/iv_property3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/d"/>
+        <ImageView
+            android:id="@+id/iv_property4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/e"/>
+        <ImageView
+            android:id="@+id/iv_property5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/f"/>
+        <ImageView
+            android:id="@+id/iv_property6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/g"/>
+        <ImageView
+            android:id="@+id/iv_property7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/h"/>
+
+        <ImageView
+            android:id="@+id/iv_property0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/a"/>
+    </FrameLayout>
+
+
+
+</RelativeLayout>

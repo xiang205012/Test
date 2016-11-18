@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ChangeColorIconWithText">
+        <attr name="iconBitmap" format="reference"></attr>
+        <attr name="bottomColor" format="color"/>
+        <attr name="text" format="string"/>
+        <attr name="textSize" format="dimension"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="MySatelliteMenu">
+        <attr name="satemenu_radius" format="dimension"/>
+        <attr name="satemenu_position">
+            <enum name="left_top" value="0"/>
+            <enum name="left_bottom" value="1"/>
+            <enum name="right_top" value="2"/>
+            <enum name="right_bottom" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="GuaGuaKaView">
+        <attr name="gua_view_textInfo" format="string"/>
+        <attr name="gua_view_textColor" format="color"/>
+        <attr name="gua_view_textSize" format="dimension"/>
+        <attr name="gua_view_outterColor" format="color"/>
+        <attr name="gua_view_bitmap" format="reference"/>
+        <attr name="gua_view_strokeWidth" format="integer"/>
+    </declare-styleable>
+
+
+</resources>

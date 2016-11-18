@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <com.xiang.viewanim.view.comm.StepBarView.StepBarView
+        android:id="@+id/stepbar_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        custom:lineHeight="3dp"
+        custom:unDoneRadius="7dp"
+        custom:doneRadius="10dp"
+        android:background="@color/light_red"
+        />
+
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:text="下一步"/>
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:text="重置"/>
+
+</LinearLayout>

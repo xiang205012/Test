@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:progressView="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_color">
+
+
+    <com.xiang.testapp.progressView.ProgressCircleView
+        android:id="@+id/progressView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        progressView:circleWidth="10dp"
+        progressView:circleSize="150dp"
+        progressView:circleColor="@android:color/white"
+        progressView:doubleColor="@android:color/holo_green_light"
+        progressView:textColor="@android:color/white"
+        progressView:textSize="20sp"
+        progressView:circleType="fill"
+        />
+
+
+</RelativeLayout>
