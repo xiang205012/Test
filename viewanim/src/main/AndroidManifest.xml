@@ -38,6 +38,10 @@
         <activity android:name=".view.comm.TreeView.TreeViewActivity"/>
         <activity android:name=".view.comm.progressbar.CircleDotProgressActivity"/>
 
+
+        <activity android:name=".anim.ballBeatIndicator.BallBeatIndicatorActivity"/>
+
+
     </application>
 
 </manifest>

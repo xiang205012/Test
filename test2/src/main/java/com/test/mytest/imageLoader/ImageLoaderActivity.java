@@ -82,6 +82,8 @@ public class ImageLoaderActivity extends Activity {
 
     private void initPopWindow() {
         popWindow = new ListPopWindow(this,folderBeanList);
+        // 设置进入退出的动画
+        popWindow.setAnimationStyle(R.style.ImageLoader_dir_PopWindow);
         popWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -210,8 +212,7 @@ public class ImageLoaderActivity extends Activity {
         rlBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 设置进入退出的动画
-                popWindow.setAnimationStyle(R.style.ImageLoader_dir_PopWindow);
+
                 popWindow.showAsDropDown(rlBottom,0,0);
 
                 WindowManager.LayoutParams layoutParams = getWindow().getAttributes();

@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.test.mytest.imageLoader.ImageLoaderActivity"
+            android:name=".testADViewPager.TestADActivity"
 
             android:label="@string/app_name" >
             <intent-filter>
@@ -54,6 +54,9 @@
         <activity android:name="com.test.mytest.testViewPagerIndicator.ViewPagerIndicatorActivity"/>
         <activity android:name="com.test.mytest.testTaobaoSortList.TaobaoSortListActivity"/>
         <activity android:name="com.test.mytest.testCalendarView.CalendarViewActivity"/>
+        <activity android:name="com.test.mytest.imageLoader.ImageLoaderActivity"/>
+
+
     </application>
 
 </manifest>
